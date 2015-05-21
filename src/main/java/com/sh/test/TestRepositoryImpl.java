@@ -14,25 +14,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.sh.sheet;
+package com.sh.test;
 
-import com.sh.repository.PersistentRepository;
+import com.sh.repository.PersistentRepositoryImpl;
+import com.sh.sheet.SheetRepository;
+import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public interface SheetRepository extends PersistentRepository<Map, Map> {
+@Repository
+public class TestRepositoryImpl extends PersistentRepositoryImpl<Map, Map> implements TestRepository {
 
-    public static final String NAMESPACE = SheetRepository.class.getName();
+    @Autowired
+    public TestRepositoryImpl(SqlSessionTemplate sqlSessionTemplate) {
+        super.setSqlSessionTemplate(sqlSessionTemplate);
+    }
 
-    Map selectByPSVNo(String PSVNo);
+    @Override
+    public String getNamespace() {
+        return this.NAMESPACE;
+    }
 
-    boolean deleteByPSVNo(String PSVNo);
-
-    List selectPSVList();
-
-    boolean createSheet(String psvNo);
-
-    boolean updateSheet(Map map);
 }

@@ -15,6 +15,7 @@ Ext.define('Pressure.view.data.DataModel', {
             fields: [
                 'psvNo'
             ],
+            autoLoad: true,
             proxy: {
                 type: 'ajax',
                 url: '/sheet/list.json',

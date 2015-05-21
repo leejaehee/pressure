@@ -14,25 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.sh.sheet;
+package com.sh.test;
 
 import com.sh.repository.PersistentRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public interface SheetRepository extends PersistentRepository<Map, Map> {
+public interface TestRepository extends PersistentRepository<Map, Map> {
 
-    public static final String NAMESPACE = SheetRepository.class.getName();
-
-    Map selectByPSVNo(String PSVNo);
-
-    boolean deleteByPSVNo(String PSVNo);
-
-    List selectPSVList();
-
-    boolean createSheet(String psvNo);
-
-    boolean updateSheet(Map map);
+    public static final String NAMESPACE = TestRepository.class.getName();
 }

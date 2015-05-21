@@ -55,29 +55,71 @@ Ext.define('Pressure.view.rightProps.RightProps', {
                         {
                             xtype: 'combo',
                             fieldLabel: 'PSV NO',
-                            bind:{
+                            bind: {
                                 store: '{psvNoComboStore}'
                             },
                             displayField: 'psvNo',
                             valueField: 'psvNo',
                             editable: false,
-                            name: 'psvNo'
+                            name: 'psvNo',
+                            listeners: {
+                                scope: this,
+                                'select': function (combo, record, eOpts) {
+                                    Ext.Ajax.request({
+                                        url: '/sheet/get.json',
+                                        method: 'GET',
+                                        params: {
+                                            PSVNo: record.data.psvNo
+                                        },
+                                        success: function (response) {
+                                            var res = Ext.decode(response.responseText);
+
+                                            Ext.ComponentQuery.query('#pressure')[0].setValue('');
+                                            Ext.ComponentQuery.query('#type')[0].setValue('');
+                                            Ext.ComponentQuery.query('#serialNo')[0].setValue('');
+                                            Ext.ComponentQuery.query('#testDate')[0].setValue('');
+
+                                            if (res.map.SET_PRESS) {
+                                                Ext.ComponentQuery.query('#pressure')[0].setValue(res.map.SET_PRESS);
+                                            }
+
+                                            if (res.map.TEST_TYPE) {
+                                                Ext.ComponentQuery.query('#type')[0].setValue(res.map.TEST_TYPE);
+                                            }
+
+                                            if (res.map.SERIAL_NO) {
+                                                Ext.ComponentQuery.query('#serialNo')[0].setValue(res.map.SERIAL_NO);
+                                            }
+
+                                            if (res.map.TEST_DATE) {
+                                                Ext.ComponentQuery.query('#testDate')[0].setValue(res.map.TEST_DATE);
+                                            }
+                                        },
+                                        failure: function () {
+                                        }
+                                    });
+                                }
+                            }
                         },
                         {
                             fieldLabel: 'Pressure',
+                            itemId: 'pressure',
                             name: 'pressure'
                         },
                         {
                             fieldLabel: 'Type',
+                            itemId: 'type',
                             name: 'type'
                         },
                         {
                             fieldLabel: 'Serial NO',
-                            name: 'type'
+                            itemId: 'serialNo',
+                            name: 'serialNo'
                         },
                         {
                             xtype: 'datefield',
                             fieldLabel: 'Test Date',
+                            itemId: 'testDate',
                             name: 'testDate',
                             renderer: function (value) {
                                 return App.Util.Date.format(new Date(), 'yyyy-MM-dd HH:mm:ss');
@@ -107,36 +149,116 @@ Ext.define('Pressure.view.rightProps.RightProps', {
                     title: 'Pressure Values',
                     items: [
                         {
-                            xtype: 'textfield',
-                            fieldLabel: 'Popping',
-                            fieldStyle: 'background-color: #333; color: green; font: normal 30px tahoma, arial, helvetica, sans-serif;',
-                            editable: false,
-                            name: 'poppingPressure',
-                            value: '000'
+                            xtype: 'panel',
+                            layout: {
+                                type: 'hbox',
+                                align: 'middle'
+                            },
+                            items: [
+                                {
+                                    xtype: 'textfield',
+                                    fieldLabel: 'Popping',
+                                    labelStyle: 'font: normal 18px tahoma, arial, helvetica, sans-serif; text-align: right; vertical-align: middle;',
+                                    fieldStyle: 'background-color: #333; color: green; font: normal 30px tahoma, arial, helvetica, sans-serif; text-align: right;',
+                                    editable: false,
+                                    name: 'poppingPressure',
+                                    itemId: 'poppingPressure',
+                                    width: 235,
+                                    value: '0.00'
+                                },
+                                {
+                                    xtype: 'label',
+                                    style: {
+                                        font: 'normal 15px tahoma, arial, helvetica, sans-serif'
+                                    },
+                                    itemId: 'poppingPressureLabel',
+                                    text: 'Mpa'
+                                }
+                            ]
                         },
                         {
-                            xtype: 'textfield',
-                            fieldLabel: 'Brow Down',
-                            fieldStyle: 'background-color: #333; color: red; font: normal 30px tahoma, arial, helvetica, sans-serif;',
-                            editable: false,
-                            name: 'browDownpressure',
-                            value: '000'
+                            xtype: 'panel',
+                            layout: {
+                                type: 'hbox',
+                                align: 'middle'
+                            },
+                            items: [
+                                {
+                                    xtype: 'textfield',
+                                    fieldLabel: 'Brow down',
+                                    labelStyle: 'font: normal 18px tahoma, arial, helvetica, sans-serif; text-align: right; vertical-align: middle;',
+                                    fieldStyle: 'background-color: #333; color: red; font: normal 30px tahoma, arial, helvetica, sans-serif; text-align: right;',
+                                    editable: false,
+                                    name: 'browDownpressure',
+                                    itemId: 'browDownpressure',
+                                    width: 235,
+                                    value: '0.00'
+                                },
+                                {
+                                    xtype: 'label',
+                                    style: {
+                                        font: 'normal 15px tahoma, arial, helvetica, sans-serif'
+                                    },
+                                    itemId: 'browDownpressureLabel',
+                                    text: 'Mpa'
+                                }
+                            ]
                         },
                         {
-                            xtype: 'textfield',
-                            fieldLabel: 'Leak Test',
-                            fieldStyle: 'background-color: #333; color: yellow; font: normal 30px tahoma, arial, helvetica, sans-serif;',
-                            editable: false,
-                            name: 'leakTestPressure',
-                            value: '000'
+                            xtype: 'panel',
+                            layout: {
+                                type: 'hbox',
+                                align: 'middle'
+                            },
+                            items: [
+                                {
+                                    xtype: 'textfield',
+                                    fieldLabel: 'Leak test',
+                                    labelStyle: 'font: normal 18px tahoma, arial, helvetica, sans-serif; text-align: right; vertical-align: middle;',
+                                    fieldStyle: 'background-color: #333; color: yellow; font: normal 30px tahoma, arial, helvetica, sans-serif; text-align: right;',
+                                    editable: false,
+                                    name: 'leakTestPressure',
+                                    itemId: 'leakTestPressure',
+                                    width: 235,
+                                    value: '0.00'
+                                },
+                                {
+                                    xtype: 'label',
+                                    style: {
+                                        font: 'normal 15px tahoma, arial, helvetica, sans-serif'
+                                    },
+                                    itemId: 'leakTestPressureLabel',
+                                    text: 'Mpa'
+                                }
+                            ]
                         },
                         {
-                            xtype: 'textfield',
-                            fieldLabel: 'Torrent',
-                            fieldStyle: 'background-color: #333; color: blue; font: normal 30px tahoma, arial, helvetica, sans-serif;',
-                            editable: false,
-                            name: 'torrentPressure',
-                            value: '000'
+                            xtype: 'panel',
+                            layout: {
+                                type: 'hbox',
+                                align: 'middle'
+                            },
+                            items: [
+                                {
+                                    xtype: 'textfield',
+                                    fieldLabel: 'Torrent',
+                                    labelStyle: 'font: normal 18px tahoma, arial, helvetica, sans-serif; text-align: right; vertical-align: middle;',
+                                    fieldStyle: 'background-color: #333; color: blue; font: normal 30px tahoma, arial, helvetica, sans-serif; text-align: right;',
+                                    editable: false,
+                                    name: 'torrentPressure',
+                                    itemId: 'torrentPressure',
+                                    width: 235,
+                                    value: '0.00'
+                                },
+                                {
+                                    xtype: 'label',
+                                    style: {
+                                        font: 'normal 15px tahoma, arial, helvetica, sans-serif'
+                                    },
+                                    itemId: 'torrentPressureLabel',
+                                    text: 'Mpa'
+                                }
+                            ]
                         }
                     ]
                 }
@@ -161,18 +283,57 @@ Ext.define('Pressure.view.rightProps.RightProps', {
                     title: 'Test Configurations',
                     items: [
                         {
-                            xtype: 'textfield',
-                            fieldLabel: 'Setting Pressure',
-                            fieldStyle: 'background-color: #333; color: blue; font: normal 20px tahoma, arial, helvetica, sans-serif;',
-                            name: 'settingPressure',
-                            value: '10.00'
+                            xtype: 'panel',
+                            layout: {
+                                type: 'hbox',
+                                align: 'middle'
+                            },
+                            items: [
+                                {
+                                    xtype: 'textfield',
+                                    fieldLabel: 'Set pressure',
+                                    labelStyle: 'font: normal 15px tahoma, arial, helvetica, sans-serif; text-align: right; vertical-align: middle;',
+                                    fieldStyle: 'background-color: #333; color: blue; font: normal 20px tahoma, arial, helvetica, sans-serif; text-align: right;',
+                                    name: 'settingPressure',
+                                    itemId: 'settingPressure',
+                                    width: 235,
+                                    value: '10.00'
+                                },
+                                {
+                                    xtype: 'label',
+                                    style: {
+                                        font: 'normal 15px tahoma, arial, helvetica, sans-serif'
+                                    },
+                                    itemId: 'settingPressureLabel',
+                                    text: 'Mpa'
+                                }
+                            ]
                         },
                         {
-                            xtype: 'textfield',
-                            fieldLabel: 'Scan Time',
-                            fieldStyle: 'background-color: #333; color: yellow; font: normal 20px tahoma, arial, helvetica, sans-serif;',
-                            name: 'scanTime',
-                            value: '1000'
+                            xtype: 'panel',
+                            layout: {
+                                type: 'hbox',
+                                align: 'middle'
+                            },
+                            items: [
+                                {
+                                    xtype: 'textfield',
+                                    fieldLabel: 'Scan time',
+                                    labelStyle: 'font: normal 15px tahoma, arial, helvetica, sans-serif; text-align: right; vertical-align: middle;',
+                                    fieldStyle: 'background-color: #333; color: yellow; font: normal 20px tahoma, arial, helvetica, sans-serif; text-align: right;',
+                                    name: 'scanTime',
+                                    itemId: 'scanTimeRigthProps',
+                                    width: 235,
+                                    value: '1000'
+                                },
+                                {
+                                    xtype: 'label',
+                                    style: {
+                                        font: 'normal 15px tahoma, arial, helvetica, sans-serif'
+                                    },
+                                    text: 'ms'
+                                }
+                            ]
                         }
                     ]
                 }

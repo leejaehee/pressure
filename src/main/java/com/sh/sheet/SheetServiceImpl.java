@@ -20,6 +20,11 @@ public class SheetServiceImpl implements SheetService {
     }
 
     @Override
+    public boolean deleteByPSVNo(String PSVNo) {
+        return sheetRepository.deleteByPSVNo(PSVNo);
+    }
+
+    @Override
     public List selectPSVList() {
         return sheetRepository.selectPSVList();
     }
@@ -27,5 +32,10 @@ public class SheetServiceImpl implements SheetService {
     @Override
     public boolean createSheet(String psvNo) {
         return sheetRepository.createSheet(psvNo);
+    }
+
+    @Override
+    public boolean updateByPSVNo(Map map) {
+        return sheetRepository.updateSheet(map);
     }
 }

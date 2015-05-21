@@ -14,22 +14,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.sh.sheet;
+package com.sh.history;
 
+import com.sh.model.History;
 import com.sh.repository.PersistentRepositoryImpl;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 @Repository
-public class SheetRepositoryImpl extends PersistentRepositoryImpl<Map, Map> implements SheetRepository {
+public class HistoryRepositoryImpl extends PersistentRepositoryImpl<Map, Map> implements HistoryRepository {
 
     @Autowired
-    public SheetRepositoryImpl(SqlSessionTemplate sqlSessionTemplate) {
+    public HistoryRepositoryImpl(SqlSessionTemplate sqlSessionTemplate) {
         super.setSqlSessionTemplate(sqlSessionTemplate);
     }
 
@@ -39,27 +38,7 @@ public class SheetRepositoryImpl extends PersistentRepositoryImpl<Map, Map> impl
     }
 
     @Override
-    public Map selectByPSVNo(String PSVNo) {
-        return this.getSqlSessionTemplate().selectOne(this.getNamespace() + ".selectByPSVNo", PSVNo);
-    }
-
-    @Override
-    public boolean deleteByPSVNo(String PSVNo) {
-        return this.getSqlSessionTemplate().update(this.getNamespace() + ".deleteByPSVNo", PSVNo) > 0;
-    }
-
-    @Override
-    public List selectPSVList() {
-        return this.getSqlSessionTemplate().selectList(this.getNamespace() + ".selectPSVList");
-    }
-
-    @Override
-    public boolean createSheet(String psvNo) {
-        return this.getSqlSessionTemplate().insert(this.getNamespace() + ".createSheet", psvNo) > 0;
-    }
-
-    @Override
-    public boolean updateSheet(Map map) {
-        return this.getSqlSessionTemplate().update(this.getNamespace() + ".updateByPSVNo", map) > 0;
+    public History createHistory(Map params) {
+        return this.getSqlSessionTemplate().selectOne(this.getNamespace() + ".createSheet", params);
     }
 }

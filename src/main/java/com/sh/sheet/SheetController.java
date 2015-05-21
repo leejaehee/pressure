@@ -4,10 +4,7 @@ import com.sh.rest.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -27,6 +24,24 @@ public class SheetController {
         Map sheet = sheetService.selectByPSVNo(PSVNo);
         response.setSuccess(true);
         response.getMap().putAll(sheet);
+        return response;
+    }
+
+    @RequestMapping("/delete")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public Response delete(@RequestParam String PSVNo) {
+        Response response = new Response();
+        response.setSuccess(sheetService.deleteByPSVNo(PSVNo));
+        return response;
+    }
+
+    @RequestMapping("/save")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public Response save(@RequestBody Map params) {
+        Response response = new Response();
+        response.setSuccess(sheetService.updateByPSVNo(params));
         return response;
     }
 

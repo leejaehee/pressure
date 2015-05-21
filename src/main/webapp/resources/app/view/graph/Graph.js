@@ -12,7 +12,8 @@ Ext.define('Pressure.view.graph.Graph', {
     requires: [
         'Pressure.view.graph.GraphController',
         'Pressure.view.graph.GraphModel',
-        'Pressure.view.data.Data'
+        'Pressure.view.data.Data',
+        'Pressure.view.conf.Conf'
     ],
 
     controller: 'graph',
@@ -28,7 +29,10 @@ Ext.define('Pressure.view.graph.Graph', {
     items: [
         {
             region: 'center',
-            xtype: 'panel'
+            xtype: 'textfield',
+            itemId: 'pressureUnit',
+            readOnly: true,
+            value: 'Pressure (Mpa)'
         }
     ],
 
@@ -45,13 +49,6 @@ Ext.define('Pressure.view.graph.Graph', {
             xtype: 'button',
             scale: 'medium',
             text: 'SAVE'
-        },
-        {
-            itemId: 'dataInput',
-            xtype: 'button',
-            scale: 'medium',
-            text: 'DATA SETTING',
-            handler: 'onDataInputClick'
         },
         {
             itemId: 'firstTest',
@@ -71,29 +68,42 @@ Ext.define('Pressure.view.graph.Graph', {
             scale: 'medium',
             text: 'SHEET PRINT'
         },
-        {
-            itemId: 'finish',
-            xtype: 'button',
-            scale: 'medium',
-            text: 'FINISH'
-        },
+        '->',
         {
             itemId: 'startButton',
             xtype: 'button',
             scale: 'medium',
+            enableToggle: true,
             style: {
-                background: 'yellow'
+                //background: 'yellow'
             },
-            text: 'START'
+            text: 'START',
+            toggleHandler: function (button, state) {
+                if (state) {
+                    // ajax start call
+                    // history, test, thread start
+
+                } else {
+                    // ajax stop call
+                    // thread stop
+
+                }
+            }
         },
+        '->',
         {
-            itemId: 'stopButton',
+            itemId: 'dataInput',
             xtype: 'button',
             scale: 'medium',
-            style: {
-                background: '#333'
-            },
-            text: 'STOP'
+            text: 'DATA SETTING',
+            handler: 'onDataInputClick'
+        },
+        {
+            itemId: 'testSetting',
+            xtype: 'button',
+            scale: 'medium',
+            text: 'TEST SETTING',
+            handler: 'onConfClick'
         }
     ]
 });

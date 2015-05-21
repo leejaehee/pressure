@@ -14,10 +14,6 @@ Ext.define('Pressure.view.data.DataController', {
 
     alias: 'controller.data',
 
-    onClickButton: function () {
-        Ext.Msg.confirm('Confirm', 'Are you sure?', 'onConfirm', this);
-    },
-
     onConfirm: function (choice) {
         if (choice === 'yes') {
             //
@@ -42,6 +38,7 @@ Ext.define('Pressure.view.data.DataController', {
 
                 items: [
                     {
+                        itemId: 'createPsvNo',
                         xtype: 'textfield',
                         fieldLabel: 'PSV NO',
                         name: 'psvNo',
@@ -52,7 +49,6 @@ Ext.define('Pressure.view.data.DataController', {
 
                 bbar: [
                     {
-                        itemId: 'createSheet',
                         xtype: 'button',
                         scale: 'medium',
                         text: 'CREATE',
@@ -68,6 +64,20 @@ Ext.define('Pressure.view.data.DataController', {
                                         slideInDuration: 400,
                                         minWidth: 400
                                     });
+
+                                    Ext.Ajax.request({
+                                        url : '/sheet/create',
+                                        method : 'GET',
+                                        params : {
+                                            PSVNo : Ext.ComponentQuery.query('#createPsvNo')[0].getValue()
+                                        },
+                                        success : function(response) {
+                                            Ext.ComponentQuery.query('#psvNo')[0].getStore().reload();
+                                        },
+                                        failure : function(){
+                                        }
+                                    });
+
                                     popup.close();
                                 },
                                 this

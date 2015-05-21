@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.sh.sheet.SheetRepository">
+<mapper namespace="com.sh.history.HistoryRepository">
 
     <!-- ==================================================================================== -->
     <!-- 1. Result and Parameter Maps -->
@@ -17,15 +17,6 @@
     <!-- 3. Select Statement -->
     <!-- ==================================================================================== -->
 
-    <select id="selectByPSVNo" resultType="map">
-        SELECT * FROM SHEET
-        WHERE PSV_NO = #{PSVNo}
-    </select>
-
-    <select id="selectPSVList" resultType="String">
-        SELECT PSV_NO FROM SHEET
-    </select>
-
     <!-- ==================================================================================== -->
     <!-- 3. Exist Statement -->
     <!-- ==================================================================================== -->
@@ -35,47 +26,45 @@
     <!-- 4. Insert Statements -->
     <!-- ==================================================================================== -->
 
-    <insert id="createSheet" parameterType="String" useGeneratedKeys="true" keyProperty="id" keyColumn="ID">
-        INSERT INTO SHEET
-        (PSV_NO)
-        VALUES
-        (#{psvNo})
+    <insert id="createHistory" parameterType="com.sh.model.History" useGeneratedKeys="true" keyProperty="id" keyColumn="ID">
+        INSERT INTO HISTORY
+         VALUES(
+          null,
+          #{historyNo},
+          #{customerField},
+          #{locationField},
+          #{fluidField},
+          #{makerField},
+          #{typeField},
+          #{serialNoField},
+          #{sizeInField},
+          #{sizeOutField},
+          #{setPressureField},
+          #{backPressureField},
+          #{pressureTypeField},
+          #{testDateField},
+          #{adjustScrewField},
+          #{upperingField},
+          #{loweringField},
+          #{workerField},
+          #{inspectorField},
+          #{managerField},
+          #{portConf},
+          #{baudrateConf},
+          #{setPressureConf},
+          #{scanTimeConf},
+          #{pressureUnitConf}
+          )
+
     </insert>
 
     <!-- ==================================================================================== -->
     <!-- 5. Update Statements -->
     <!-- ==================================================================================== -->
 
-    <update id="updateByPSVNo" parameterType="Map">
-        UPDATE SHEET
-        SET
-          CUSTOMER = #{customerField},
-          LOCATION = #{locationField},
-          FLUID = #{fluidField},
-          MAKER = #{makerField},
-          TEST_TYPE = #{typeField},
-          SERIAL_NO = #{serialNoField},
-          INLET_SIZE = #{sizeInField},
-          OUTLET_SIZE = #{sizeOutField},
-          SET_PRESS = #{setPressureField},
-          BACK_PRESS = #{backPressureField},
-          VELVE_TYPE = #{pressureTypeField},
-          TEST_DATE = #{testDateField},
-          ADJUST_SCREW = #{adjustScrewField},
-          UPPERING = #{upperingField},
-          LOWERING = #{loweringField},
-          WORKER = #{workerField},
-          INSPECTOR = #{inspectorField},
-          MANAGER = #{managerField}
-      WHERE PSV_NO = #{psvNo}
-
-    </update>
 
     <!-- ==================================================================================== -->
     <!-- 6. Delete Statements -->
     <!-- ==================================================================================== -->
-    <delete id="deleteByPSVNo">
-        DELETE FROM SHEET
-        WHERE PSV_NO = #{PSVNo}
-    </delete>
+
 </mapper>
