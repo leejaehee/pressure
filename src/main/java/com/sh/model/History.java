@@ -29,7 +29,7 @@ public class History implements Serializable {
 
     private long id;
 
-    private String histroyNo;
+    private String histroyId;
     private String customer;
     private String testType;
     private String psvNo;
@@ -85,12 +85,12 @@ public class History implements Serializable {
         this.id = id;
     }
 
-    public String getHistroyNo() {
-        return histroyNo;
+    public String getHistroyId() {
+        return histroyId;
     }
 
-    public void setHistroyNo(String histroyNo) {
-        this.histroyNo = histroyNo;
+    public void setHistroyId(String histroyId) {
+        this.histroyId = histroyId;
     }
 
     public String getCustomer() {
@@ -345,7 +345,7 @@ public class History implements Serializable {
     public String toString() {
         return "History{" +
                 "id=" + id +
-                ", histroyNo='" + histroyNo + '\'' +
+                ", histroyId='" + histroyId + '\'' +
                 ", customer='" + customer + '\'' +
                 ", testType='" + testType + '\'' +
                 ", psvNo='" + psvNo + '\'' +

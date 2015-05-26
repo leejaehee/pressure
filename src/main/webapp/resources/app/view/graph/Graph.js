@@ -80,8 +80,77 @@ Ext.define('Pressure.view.graph.Graph', {
             text: 'START',
             toggleHandler: function (button, state) {
                 if (state) {
-                    // ajax start call
-                    // history, test, thread start
+                    if(!Ext.ComponentQuery.query('#psvNo')[0].getValue()){
+                        Ext.toast({
+                            html: 'Please select a PSVNO.',
+                            closable: false,
+                            align: 't',
+                            slideInDuration: 200,
+                            minWidth: 400
+                        });
+                        return false;
+                    }
+                    // TODO UI에서 setHistoryId 가져와야 한다.
+                    var setHistoryId = 'setHistoryId' + new Date().getTime() + '_' + Math.floor((Math.random() * 100) + 1);
+                    // TODO UI에서 step 가져와야 한다.
+                    var step = 1;
+                    // historyId는 항상 생성한다.
+                    var historyId = 'historyId' + new Date().getTime() + '_' + Math.floor((Math.random() * 100) + 1);
+                    var psvNo = Ext.ComponentQuery.query('#psvNo')[0].getValue();
+                    // testId는 항상 생성한다.
+                    var testId = 'testId' + new Date().getTime() + '_' + Math.floor((Math.random() * 100) + 1);
+
+                    var params = {
+                        setHistoryId: setHistoryId,
+                        step: step,
+                        historyId: historyId,
+                        customerField: '1',
+                        typeField: '2',
+                        psvNo: psvNo,
+                        fluidField: '3',
+                        serialNoField: '4',
+                        locationField: '5',
+                        makerField: '6',
+                        pressureTypeField: '7',
+                        sizeInField: '8',
+                        sizeOutField: '9',
+                        testDateField: '10',
+                        setPressureField: '11',
+                        backPressureField: '12',
+                        coldPressureField: '13',
+                        resultSetPressureField: '14',
+                        resultColdPressureField: '15',
+                        resultBackPressureField: '152',
+                        resultPopPressureField: '16',
+                        resultLeakPressureField: '17',
+                        resultOKPressureField: '18',
+                        adjustScrewField: '19',
+                        upperingField: '20',
+                        loweringField: '21',
+                        workerField: '22',
+                        inspectorField: '23',
+                        managerField: '24',
+                        portConf: '25',
+                        baudrateConf: '26',
+                        setPressureConf: '27',
+                        scanTimeConf: '28',
+                        pressureUnitConf: '29',
+                        testId: testId
+                    }
+
+                    Ext.Ajax.request({
+                        url: '/graph/create',
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json; charset=utf-8;'
+                        },
+                        params: Ext.encode(params),
+                        success: function () {
+                        },
+                        failure: function () {
+                        }
+                    });
 
                 } else {
                     // ajax stop call

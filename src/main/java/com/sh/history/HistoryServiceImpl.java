@@ -17,7 +17,17 @@ public class HistoryServiceImpl implements HistoryService {
     HistoryRepository historyRepository;
 
     @Override
-    public History createHistory(Map params) {
-        return historyRepository.createHistory(params);
+    public boolean createHistory(Map map) {
+        return historyRepository.createHistory(map);
+    }
+
+    @Override
+    public boolean createSetHistory(Map map) {
+        return historyRepository.createSetHistory(map);
+    }
+
+    @Override
+    public boolean updateSetHistory(Map map) {
+        return historyRepository.updateSetHistory(map);
     }
 }

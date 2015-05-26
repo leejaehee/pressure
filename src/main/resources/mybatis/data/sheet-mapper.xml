@@ -68,7 +68,6 @@
           INSPECTOR = #{inspectorField},
           MANAGER = #{managerField}
       WHERE PSV_NO = #{psvNo}
-
     </update>
 
     <!-- ==================================================================================== -->

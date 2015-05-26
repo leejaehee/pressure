@@ -48,7 +48,7 @@ Ext.define('Pressure.view.data.Data', {
                     valueField: 'psvNo',
                     editable: false,
                     name: 'psvNo',
-                    itemId: 'psvNo',
+                    itemId: 'psvNoField',
                     listeners: {
                         scope: this,
                         'select': function (combo, record, eOpts) {
@@ -381,7 +381,7 @@ Ext.define('Pressure.view.data.Data', {
             text: 'SAVE',
             handler: function (btn) {
                 var params = {
-                    psvNo: Ext.ComponentQuery.query('#psvNo')[0].getValue(),
+                    psvNo: Ext.ComponentQuery.query('#psvNoField')[0].getValue(),
                     customerField: Ext.ComponentQuery.query('#customerField')[0].getValue(),
                     locationField: Ext.ComponentQuery.query('#locationField')[0].getValue(),
                     fluidField: Ext.ComponentQuery.query('#fluidField')[0].getValue(),
@@ -411,8 +411,22 @@ Ext.define('Pressure.view.data.Data', {
                     },
                     params: Ext.encode(params),
                     success: function () {
+                        Ext.toast({
+                            html: 'Save success.',
+                            closable: false,
+                            align: 't',
+                            slideInDuration: 200,
+                            minWidth: 400
+                        });
                     },
                     failure: function () {
+                        Ext.toast({
+                            html: 'Save fail.',
+                            closable: false,
+                            align: 't',
+                            slideInDuration: 200,
+                            minWidth: 400
+                        });
                     }
                 });
             }

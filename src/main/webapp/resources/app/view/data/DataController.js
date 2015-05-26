@@ -57,14 +57,6 @@ Ext.define('Pressure.view.data.DataController', {
                                 'Confirm',
                                 'Are you sure?',
                                 function () {
-                                    Ext.toast({
-                                        html: 'Create Complete.',
-                                        closable: false,
-                                        align: 't',
-                                        slideInDuration: 400,
-                                        minWidth: 400
-                                    });
-
                                     Ext.Ajax.request({
                                         url : '/sheet/create',
                                         method : 'GET',
@@ -72,9 +64,23 @@ Ext.define('Pressure.view.data.DataController', {
                                             PSVNo : Ext.ComponentQuery.query('#createPsvNo')[0].getValue()
                                         },
                                         success : function(response) {
+                                            Ext.toast({
+                                                html: 'Create success.',
+                                                closable: false,
+                                                align: 't',
+                                                slideInDuration: 400,
+                                                minWidth: 400
+                                            });
                                             Ext.ComponentQuery.query('#psvNo')[0].getStore().reload();
                                         },
                                         failure : function(){
+                                            Ext.toast({
+                                                html: 'Create fail.',
+                                                closable: false,
+                                                align: 't',
+                                                slideInDuration: 400,
+                                                minWidth: 400
+                                            });
                                         }
                                     });
 

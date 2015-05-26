@@ -6,5 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 public interface HistoryService {
-    History createHistory(Map params);
+    boolean createHistory(Map map);
+
+    boolean createSetHistory(Map map);
+
+    boolean updateSetHistory(Map map);
 }

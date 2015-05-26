@@ -24,4 +24,6 @@ import java.util.Map;
 public interface TestRepository extends PersistentRepository<Map, Map> {
 
     public static final String NAMESPACE = TestRepository.class.getName();
+
+    void createTest(Map params);
 }

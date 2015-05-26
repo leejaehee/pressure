@@ -38,4 +38,8 @@ public class TestRepositoryImpl extends PersistentRepositoryImpl<Map, Map> imple
         return this.NAMESPACE;
     }
 
+    @Override
+    public void createTest(Map params) {
+        this.getSqlSessionTemplate().insert("", params);
+    }
 }

@@ -26,5 +26,9 @@ public interface HistoryRepository extends PersistentRepository<Map, Map> {
 
     public static final String NAMESPACE = HistoryRepository.class.getName();
 
-    History createHistory(Map params);
+    boolean createHistory(Map map);
+
+    boolean createSetHistory(Map map);
+
+    boolean updateSetHistory(Map map);
 }

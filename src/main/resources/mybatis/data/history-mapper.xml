@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sh.history.HistoryRepository">
+
+    <!-- ==================================================================================== -->
+    <!-- 1. Result and Parameter Maps -->
+    <!-- ==================================================================================== -->
+
+
+    <!-- ==================================================================================== -->
+    <!-- 2. Sql Fragments -->
+    <!-- ==================================================================================== -->
+
+
+    <!-- ==================================================================================== -->
+    <!-- 3. Select Statement -->
+    <!-- ==================================================================================== -->
+
+    <!-- ==================================================================================== -->
+    <!-- 3. Exist Statement -->
+    <!-- ==================================================================================== -->
+
+
+    <!-- ==================================================================================== -->
+    <!-- 4. Insert Statements -->
+    <!-- ==================================================================================== -->
+
+    <insert id="createHistory" parameterType="Map" useGeneratedKeys="true" keyProperty="id" keyColumn="ID">
+    INSERT INTO HISTORY
+    (ID,
+    HISTORY_ID,
+    CUSTOMER,
+    TEST_TYPE,
+    PSV_NO,
+    FLUID,
+    SERIAL_NO,
+    LOCATION,
+    MAKER,
+    VELVE_TYPE,
+    INLET_SIZE,
+    OUTLET_SIZE,
+    TEST_DATE,
+    SET_PRESS,
+    BACK_PRESS,
+    COLD_PRESS,
+    RESULT_SET_PRESS,
+    RESULT_COLD_PRESS,
+    RESULT_BACK_PRESS,
+    RESULT_POP_PRESS,
+    RESULT_LEAK_PRESS,
+    RESULT_OK,
+    ADJUST_SCREW,
+    UPPERING,
+    LOWERING,
+    WORKER,
+    INSPECTOR,
+    MANAGER,
+    CONF_PORT,
+    CONF_BAUDRATE,
+    CONF_SET_PRESS,
+    CONF_SCAN_TIME,
+    CONF_PRESS_UNIT,
+    TEST_ID)
+    VALUES
+    (null,
+    #{historyId},
+    #{customerField},
+    #{typeField},
+    #{psvNo},
+    #{fluidField},
+    #{serialNoField},
+    #{locationField},
+    #{makerField},
+    #{pressureTypeField},
+    #{sizeInField},
+    #{sizeOutField},
+    #{testDateField},
+    #{setPressureField},
+    #{backPressureField},
+    #{coldPressureField},
+    #{resultSetPressureField},
+    #{resultColdPressureField},
+    #{resultBackPressureField},
+    #{resultPopPressureField},
+    #{resultLeakPressureField},
+    #{resultOKPressureField},
+    #{adjustScrewField},
+    #{upperingField},
+    #{loweringField},
+    #{workerField},
+    #{inspectorField},
+    #{managerField},
+    #{portConf},
+    #{baudrateConf},
+    #{setPressureConf},
+    #{scanTimeConf},
+    #{pressureUnitConf},
+    #{testId});
+    </insert>
+
+    <insert id="createSetHistory" parameterType="Map" useGeneratedKeys="true" keyProperty="id" keyColumn="ID">
+    INSERT INTO SET_HISTORY
+    (ID,
+    SET_HISTORY_ID,
+    FIRST_HISTORY_ID,
+    SECOND_HISTORY_ID)
+    VALUES
+    (null,
+    #{setHistoryId},
+    #{firstHistoryld},
+    #{secondHistoryld});
+    </insert>
+
+    <!-- ==================================================================================== -->
+    <!-- 5. Update Statements -->
+    <!-- ==================================================================================== -->
+
+    <update id="updateSetHistory" parameterType="Map">
+        UPDATE SET_HISTORY
+        SET
+        SECOND_HISTORY_ID = #{secondHistoryld}
+        WHERE SET_HISTORY_ID = #{setHistoryId}
+    </update>
+
+    <!-- ==================================================================================== -->
+    <!-- 6. Delete Statements -->
+    <!-- ==================================================================================== -->
+
+</mapper>

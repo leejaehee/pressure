@@ -61,6 +61,7 @@ Ext.define('Pressure.view.rightProps.RightProps', {
                             displayField: 'psvNo',
                             valueField: 'psvNo',
                             editable: false,
+                            itemId: 'psvNo',
                             name: 'psvNo',
                             listeners: {
                                 scope: this,

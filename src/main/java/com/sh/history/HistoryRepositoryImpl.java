@@ -16,7 +16,6 @@
  */
 package com.sh.history;
 
-import com.sh.model.History;
 import com.sh.repository.PersistentRepositoryImpl;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +37,17 @@ public class HistoryRepositoryImpl extends PersistentRepositoryImpl<Map, Map> im
     }
 
     @Override
-    public History createHistory(Map params) {
-        return this.getSqlSessionTemplate().selectOne(this.getNamespace() + ".createSheet", params);
+    public boolean createHistory(Map map) {
+        return this.getSqlSessionTemplate().insert(this.getNamespace() + ".createHistory", map) > 0;
+    }
+
+    @Override
+    public boolean createSetHistory(Map map) {
+        return this.getSqlSessionTemplate().insert(this.getNamespace() + ".createSetHistory", map) > 0;
+    }
+
+    @Override
+    public boolean updateSetHistory(Map map) {
+        return this.getSqlSessionTemplate().insert(this.getNamespace() + ".updateSetHistory", map) > 0;
     }
 }

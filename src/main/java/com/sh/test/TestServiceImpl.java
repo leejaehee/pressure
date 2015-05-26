@@ -13,5 +13,10 @@ import java.util.Map;
 public class TestServiceImpl implements TestService {
 
     @Autowired
-    SheetRepository sheetRepository;
+    TestRepository testRepository;
+
+    @Override
+    public void createTest(Map params) {
+        testRepository.createTest(params);
+    }
 }
