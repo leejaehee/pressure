@@ -80,7 +80,7 @@ Ext.define('Pressure.view.graph.Graph', {
             text: 'START',
             toggleHandler: function (button, state) {
                 if (state) {
-                    if(!Ext.ComponentQuery.query('#psvNo')[0].getValue()){
+                    if (!Ext.ComponentQuery.query('#PSV_NO')[0].getValue()) {
                         Ext.toast({
                             html: 'Please select a PSVNO.',
                             closable: false,
@@ -91,14 +91,14 @@ Ext.define('Pressure.view.graph.Graph', {
                         return false;
                     }
                     // TODO UI에서 setHistoryId 가져와야 한다.
-                    var setHistoryId = 'setHistoryId' + new Date().getTime() + '_' + Math.floor((Math.random() * 100) + 1);
+                    var setHistoryId = 'setHistory_' + new Date().getTime() + '_' + Math.floor((Math.random() * 100) + 1);
                     // TODO UI에서 step 가져와야 한다.
                     var step = 1;
                     // historyId는 항상 생성한다.
-                    var historyId = 'historyId' + new Date().getTime() + '_' + Math.floor((Math.random() * 100) + 1);
-                    var psvNo = Ext.ComponentQuery.query('#psvNo')[0].getValue();
+                    var historyId = 'history_' + new Date().getTime() + '_' + Math.floor((Math.random() * 100) + 1);
+                    var PSV_NO = Ext.ComponentQuery.query('#PSV_NO')[0].getValue();
                     // testId는 항상 생성한다.
-                    var testId = 'testId' + new Date().getTime() + '_' + Math.floor((Math.random() * 100) + 1);
+                    var testId = 'test_' + new Date().getTime() + '_' + Math.floor((Math.random() * 100) + 1);
 
                     var params = {
                         setHistoryId: setHistoryId,
@@ -106,7 +106,7 @@ Ext.define('Pressure.view.graph.Graph', {
                         historyId: historyId,
                         customerField: '1',
                         typeField: '2',
-                        psvNo: psvNo,
+                        PSV_NO: PSV_NO,
                         fluidField: '3',
                         serialNoField: '4',
                         locationField: '5',
@@ -139,7 +139,7 @@ Ext.define('Pressure.view.graph.Graph', {
                     }
 
                     Ext.Ajax.request({
-                        url: '/graph/create',
+                        url: '/graph/start',
                         method: 'POST',
                         headers: {
                             'Accept': 'application/json',
@@ -147,14 +147,32 @@ Ext.define('Pressure.view.graph.Graph', {
                         },
                         params: Ext.encode(params),
                         success: function () {
+                            var websocket = new WebSocket("ws://localhost:8080/websocket/desktop-client");
+                            websocket.onmessage = function (evnt) {
+                                // TODO grid and graph update
+                                Ext.ComponentQuery.query('#pressureUnit')[0].setValue(Ext.ComponentQuery.query('#pressureUnit')[0].getValue() + ' : ' + evnt.data);
+                            };
+                            websocket.onerror = function (evnt) {
+                                alert('ERROR: ' + evnt.data);
+                            };
                         },
                         failure: function () {
                         }
                     });
 
                 } else {
-                    // ajax stop call
-                    // thread stop
+                    Ext.Ajax.request({
+                        url: '/graph/stop',
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json; charset=utf-8;'
+                        },
+                        success: function () {
+                        },
+                        failure: function () {
+                        }
+                    });
 
                 }
             }

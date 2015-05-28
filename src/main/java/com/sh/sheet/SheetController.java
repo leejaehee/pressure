@@ -19,9 +19,9 @@ public class SheetController {
     @RequestMapping("/get")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public Response get(@RequestParam String PSVNo) {
+    public Response get(@RequestParam String PSV_NO) {
         Response response = new Response();
-        Map sheet = sheetService.selectByPSVNo(PSVNo);
+        Map sheet = sheetService.selectByPSVNo(PSV_NO);
         response.setSuccess(true);
         response.getMap().putAll(sheet);
         return response;
@@ -30,9 +30,9 @@ public class SheetController {
     @RequestMapping("/delete")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public Response delete(@RequestParam String PSVNo) {
+    public Response delete(@RequestParam String PSV_NO) {
         Response response = new Response();
-        response.setSuccess(sheetService.deleteByPSVNo(PSVNo));
+        response.setSuccess(sheetService.deleteByPSVNo(PSV_NO));
         return response;
     }
 
@@ -52,7 +52,7 @@ public class SheetController {
         List sheet = sheetService.selectPSVList();
         String result = "{\"list\":[";
         for (Object object : sheet) {
-            result += "{\"psvNo\":\"" + object.toString() + "\"},";
+            result += "{\"PSV_NO\":\"" + object.toString() + "\"},";
         }
 
         result = result.substring(0, result.length() - 1);
@@ -63,8 +63,8 @@ public class SheetController {
     @RequestMapping("/create")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public boolean create(@RequestParam String PSVNo) {
-        boolean created = sheetService.createSheet(PSVNo);
+    public boolean create(@RequestParam String PSV_NO) {
+        boolean created = sheetService.createSheet(PSV_NO);
         return created;
     }
 

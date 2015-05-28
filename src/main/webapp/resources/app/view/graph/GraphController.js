@@ -18,7 +18,7 @@ Ext.define('Pressure.view.graph.GraphController', {
         Ext.MessageBox.confirm('Confirm', 'Are you sure you want to do that?', this.showResult, this);
     },
     onConfClick: function (btn, e, eOpts) {
-        var popup = Ext.create('Ext.Window', {
+        Ext.create('Ext.Window', {
             title: 'Configuration',
             layout: 'fit',
             modal: true,
@@ -29,7 +29,7 @@ Ext.define('Pressure.view.graph.GraphController', {
         }).center().show();
     },
     onDataInputClick: function (btn, e, eOpts) {
-        var popup = Ext.create('Ext.Window', {
+        Ext.create('Ext.Window', {
             title: 'Data',
             layout: 'fit',
             modal: true,
@@ -40,28 +40,9 @@ Ext.define('Pressure.view.graph.GraphController', {
         }).center().show();
     },
     onStartClick: function (btn, e, eOpts) {
-        var popup = Ext.create('Ext.Window', {
-            title: 'Data',
-            layout: 'fit',
-            modal: true,
-            padding: '5',
-            items: {
-                xtype: 'data'
-            }
-        }).center().show();
     },
     onStopClick: function (btn, e, eOpts) {
-        var popup = Ext.create('Ext.Window', {
-            title: 'Data',
-            layout: 'fit',
-            modal: true,
-            padding: '5',
-            items: {
-                xtype: 'data'
-            }
-        }).center().show();
     },
-
     showResult: function (btn, text) {
         this.showToast(Ext.String.format('You clicked the {0} button', btn));
     },

@@ -39,7 +39,7 @@ public class TestRepositoryImpl extends PersistentRepositoryImpl<Map, Map> imple
     }
 
     @Override
-    public void createTest(Map params) {
-        this.getSqlSessionTemplate().insert("", params);
+    public void createTest(Map map) {
+        this.getSqlSessionTemplate().insert(this.getNamespace() + ".createTest", map);
     }
 }

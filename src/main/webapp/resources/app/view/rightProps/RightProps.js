@@ -58,11 +58,12 @@ Ext.define('Pressure.view.rightProps.RightProps', {
                             bind: {
                                 store: '{psvNoComboStore}'
                             },
-                            displayField: 'psvNo',
-                            valueField: 'psvNo',
+                            autoSelect: true,
+                            displayField: 'PSV_NO',
+                            valueField: 'PSV_NO',
                             editable: false,
-                            itemId: 'psvNo',
-                            name: 'psvNo',
+                            itemId: 'PSV_NO',
+                            name: 'PSV_NO',
                             listeners: {
                                 scope: this,
                                 'select': function (combo, record, eOpts) {
@@ -70,31 +71,13 @@ Ext.define('Pressure.view.rightProps.RightProps', {
                                         url: '/sheet/get.json',
                                         method: 'GET',
                                         params: {
-                                            PSVNo: record.data.psvNo
+                                            PSV_NO: record.data.PSV_NO
                                         },
                                         success: function (response) {
                                             var res = Ext.decode(response.responseText);
-
-                                            Ext.ComponentQuery.query('#pressure')[0].setValue('');
-                                            Ext.ComponentQuery.query('#type')[0].setValue('');
-                                            Ext.ComponentQuery.query('#serialNo')[0].setValue('');
-                                            Ext.ComponentQuery.query('#testDate')[0].setValue('');
-
-                                            if (res.map.SET_PRESS) {
-                                                Ext.ComponentQuery.query('#pressure')[0].setValue(res.map.SET_PRESS);
-                                            }
-
-                                            if (res.map.TEST_TYPE) {
-                                                Ext.ComponentQuery.query('#type')[0].setValue(res.map.TEST_TYPE);
-                                            }
-
-                                            if (res.map.SERIAL_NO) {
-                                                Ext.ComponentQuery.query('#serialNo')[0].setValue(res.map.SERIAL_NO);
-                                            }
-
-                                            if (res.map.TEST_DATE) {
-                                                Ext.ComponentQuery.query('#testDate')[0].setValue(res.map.TEST_DATE);
-                                            }
+                                            Ext.ComponentQuery.query('rightProps')[0].getForm().reset();
+                                            Ext.ComponentQuery.query('rightProps')[0].getForm().setValues(res.map);
+                                            COMMON = res.map;
                                         },
                                         failure: function () {
                                         }
@@ -104,24 +87,24 @@ Ext.define('Pressure.view.rightProps.RightProps', {
                         },
                         {
                             fieldLabel: 'Pressure',
-                            itemId: 'pressure',
-                            name: 'pressure'
+                            itemId: 'SET_PRESS',
+                            name: 'SET_PRESS'
                         },
                         {
                             fieldLabel: 'Type',
-                            itemId: 'type',
-                            name: 'type'
+                            itemId: 'TEST_TYPE',
+                            name: 'TEST_TYPE'
                         },
                         {
                             fieldLabel: 'Serial NO',
-                            itemId: 'serialNo',
-                            name: 'serialNo'
+                            itemId: 'SERIAL_NO',
+                            name: 'SERIAL_NO'
                         },
                         {
                             xtype: 'datefield',
                             fieldLabel: 'Test Date',
-                            itemId: 'testDate',
-                            name: 'testDate',
+                            itemId: 'TEST_DATE',
+                            name: 'TEST_DATE',
                             renderer: function (value) {
                                 return App.Util.Date.format(new Date(), 'yyyy-MM-dd HH:mm:ss');
 //                                return App.Util.Date.format(new Date(value), 'yyyy-MM-dd HH:mm:ss');

@@ -38,10 +38,9 @@ Ext.define('Pressure.view.data.DataController', {
 
                 items: [
                     {
-                        itemId: 'createPsvNo',
                         xtype: 'textfield',
                         fieldLabel: 'PSV NO',
-                        name: 'psvNo',
+                        name: 'PSV_NO',
                         minValue: 1,
                         maxValue: 125
                     }
@@ -52,18 +51,18 @@ Ext.define('Pressure.view.data.DataController', {
                         xtype: 'button',
                         scale: 'medium',
                         text: 'CREATE',
-                        handler: function () {
+                        handler: function (btn, e, eOpts) {
                             Ext.Msg.confirm(
                                 'Confirm',
                                 'Are you sure?',
                                 function () {
                                     Ext.Ajax.request({
-                                        url : '/sheet/create',
-                                        method : 'GET',
-                                        params : {
-                                            PSVNo : Ext.ComponentQuery.query('#createPsvNo')[0].getValue()
+                                        url: '/sheet/create',
+                                        method: 'GET',
+                                        params: {
+                                            PSV_NO: btn.up('form').down('textfield').getValue()
                                         },
-                                        success : function(response) {
+                                        success: function (response) {
                                             Ext.toast({
                                                 html: 'Create success.',
                                                 closable: false,
@@ -71,9 +70,10 @@ Ext.define('Pressure.view.data.DataController', {
                                                 slideInDuration: 400,
                                                 minWidth: 400
                                             });
-                                            Ext.ComponentQuery.query('#psvNo')[0].getStore().reload();
+                                            Ext.ComponentQuery.query('data #PSV_NO')[0].getStore().reload();
+                                            Ext.ComponentQuery.query('rightProps #PSV_NO')[0].getStore().reload();
                                         },
-                                        failure : function(){
+                                        failure: function () {
                                             Ext.toast({
                                                 html: 'Create fail.',
                                                 closable: false,
@@ -101,5 +101,70 @@ Ext.define('Pressure.view.data.DataController', {
                 ]
             }
         }).center().show();
+    },
+
+    onSaveSheetMetaClick: function (btn, e, eOpts) {
+        COMMON = Ext.ComponentQuery.query('data')[0].getForm().getValues();
+
+        Ext.Ajax.request({
+            url: '/sheet/save',
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json; charset=utf-8;'
+            },
+            params: Ext.encode(COMMON),
+            success: function () {
+                Ext.toast({
+                    html: 'Save success.',
+                    closable: false,
+                    align: 't',
+                    slideInDuration: 200,
+                    minWidth: 400
+                });
+            },
+            failure: function () {
+                Ext.toast({
+                    html: 'Save fail.',
+                    closable: false,
+                    align: 't',
+                    slideInDuration: 200,
+                    minWidth: 400
+                });
+            }
+        });
+    },
+
+    onDeleteSheetMetaClick: function (btn, e, eOpts) {
+        Ext.Ajax.request({
+            url: '/sheet/delete',
+            method: 'GET',
+            params: {
+                PSV_NO: Ext.ComponentQuery.query('data #PSV_NO')[0].getValue()
+            },
+            success: function () {
+                Ext.ComponentQuery.query('data')[0].getForm().reset();
+                Ext.ComponentQuery.query('rightProps')[0].getForm().reset();
+                Ext.ComponentQuery.query('data #PSV_NO')[0].getStore().reload();
+                Ext.ComponentQuery.query('rightProps #PSV_NO')[0].getStore().reload();
+                COMMON = {};
+                Ext.toast({
+                    html: 'Delete success.',
+                    closable: false,
+                    align: 't',
+                    slideInDuration: 200,
+                    minWidth: 400
+                });
+            },
+            failure: function () {
+                Ext.toast({
+                    html: 'Delete fail.',
+                    closable: false,
+                    align: 't',
+                    slideInDuration: 200,
+                    minWidth: 400
+                });
+            }
+        });
     }
 });

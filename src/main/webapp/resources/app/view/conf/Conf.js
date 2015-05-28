@@ -134,6 +134,8 @@ Ext.define('Pressure.view.conf.Conf', {
                             bind: {
                                 store: '{unitComboStore}'
                             },
+                            allowBlank: false,
+                            autoSelect: true,
                             displayField: 'pressureUnitConf',
                             valueField: 'pressureUnitConf',
                             editable: false,

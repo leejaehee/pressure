@@ -44,11 +44,12 @@ Ext.define('Pressure.view.data.Data', {
                     bind: {
                         store: '{psvNoComboStore}'
                     },
-                    displayField: 'psvNo',
-                    valueField: 'psvNo',
+                    autoSelect: true,
+                    displayField: 'PSV_NO',
+                    valueField: 'PSV_NO',
                     editable: false,
-                    name: 'psvNo',
-                    itemId: 'psvNoField',
+                    name: 'PSV_NO',
+                    itemId: 'PSV_NO',
                     listeners: {
                         scope: this,
                         'select': function (combo, record, eOpts) {
@@ -56,101 +57,15 @@ Ext.define('Pressure.view.data.Data', {
                                 url: '/sheet/get.json',
                                 method: 'GET',
                                 params: {
-                                    PSVNo: record.data.psvNo
+                                    PSV_NO: record.data.PSV_NO
                                 },
                                 success: function (response) {
                                     var res = Ext.decode(response.responseText);
-
-                                    Ext.ComponentQuery.query('#customerField')[0].setValue('');
-                                    Ext.ComponentQuery.query('#locationField')[0].setValue('');
-                                    Ext.ComponentQuery.query('#fluidField')[0].setValue('');
-                                    Ext.ComponentQuery.query('#makerField')[0].setValue('');
-                                    Ext.ComponentQuery.query('#typeField')[0].setValue('');
-                                    Ext.ComponentQuery.query('#serialNoField')[0].setValue('');
-                                    Ext.ComponentQuery.query('#sizeInField')[0].setValue('');
-                                    Ext.ComponentQuery.query('#sizeOutField')[0].setValue('');
-                                    Ext.ComponentQuery.query('#setPressureField')[0].setValue('');
-                                    Ext.ComponentQuery.query('#backPressureField')[0].setValue('');
-                                    Ext.ComponentQuery.query('#pressureTypeField')[0].setValue('');
-                                    Ext.ComponentQuery.query('#testDateField')[0].setValue('');
-                                    Ext.ComponentQuery.query('#adjustScrewField')[0].setValue('');
-                                    Ext.ComponentQuery.query('#upperingField')[0].setValue('');
-                                    Ext.ComponentQuery.query('#loweringField')[0].setValue('');
-                                    Ext.ComponentQuery.query('#workerField')[0].setValue('');
-                                    Ext.ComponentQuery.query('#inspectorField')[0].setValue('');
-                                    Ext.ComponentQuery.query('#managerField')[0].setValue('');
-
-                                    if (res.map.CUSTOMER) {
-                                        Ext.ComponentQuery.query('#customerField')[0].setValue(res.map.CUSTOMER);
-                                    }
-
-                                    if (res.map.LOCATION) {
-                                        Ext.ComponentQuery.query('#locationField')[0].setValue(res.map.LOCATION);
-                                    }
-
-                                    if (res.map.FLUID) {
-                                        Ext.ComponentQuery.query('#fluidField')[0].setValue(res.map.FLUID);
-                                    }
-
-                                    if (res.map.MAKER) {
-                                        Ext.ComponentQuery.query('#makerField')[0].setValue(res.map.MAKER);
-                                    }
-
-                                    if (res.map.TEST_TYPE) {
-                                        Ext.ComponentQuery.query('#typeField')[0].setValue(res.map.TEST_TYPE);
-                                    }
-
-                                    if (res.map.SERIAL_NO) {
-                                        Ext.ComponentQuery.query('#serialNoField')[0].setValue(res.map.SERIAL_NO);
-                                    }
-
-                                    if (res.map.INLET_SIZE) {
-                                        Ext.ComponentQuery.query('#sizeInField')[0].setValue(res.map.INLET_SIZE);
-                                    }
-
-                                    if (res.map.OUTLET_SIZE) {
-                                        Ext.ComponentQuery.query('#sizeOutField')[0].setValue(res.map.OUTLET_SIZE);
-                                    }
-
-                                    if (res.map.SET_PRESS) {
-                                        Ext.ComponentQuery.query('#setPressureField')[0].setValue(res.map.SET_PRESS);
-                                    }
-
-                                    if (res.map.BACK_PRESS) {
-                                        Ext.ComponentQuery.query('#backPressureField')[0].setValue(res.map.BACK_PRESS);
-                                    }
-
-                                    if (res.map.VELVE_TYPE) {
-                                        Ext.ComponentQuery.query('#pressureTypeField')[0].setValue(res.map.VELVE_TYPE);
-                                    }
-
-                                    if (res.map.TEST_DATE) {
-                                        Ext.ComponentQuery.query('#testDateField')[0].setValue(res.map.TEST_DATE);
-                                    }
-
-                                    if (res.map.ADJUST_SCREW) {
-                                        Ext.ComponentQuery.query('#adjustScrewField')[0].setValue(res.map.ADJUST_SCREW);
-                                    }
-
-                                    if (res.map.UPPERING) {
-                                        Ext.ComponentQuery.query('#upperingField')[0].setValue(res.map.UPPERING);
-                                    }
-
-                                    if (res.map.LOWERING) {
-                                        Ext.ComponentQuery.query('#loweringField')[0].setValue(res.map.LOWERING);
-                                    }
-
-                                    if (res.map.WORKER) {
-                                        Ext.ComponentQuery.query('#workerField')[0].setValue(res.map.WORKER);
-                                    }
-
-                                    if (res.map.INSPECTOR) {
-                                        Ext.ComponentQuery.query('#inspectorField')[0].setValue(res.map.INSPECTOR);
-                                    }
-
-                                    if (res.map.MANAGER) {
-                                        Ext.ComponentQuery.query('#managerField')[0].setValue(res.map.MANAGER);
-                                    }
+                                    Ext.ComponentQuery.query('data')[0].getForm().reset();
+                                    Ext.ComponentQuery.query('data')[0].getForm().setValues(res.map);
+                                    Ext.ComponentQuery.query('rightProps')[0].getForm().reset();
+                                    Ext.ComponentQuery.query('rightProps')[0].getForm().setValues(res.map);
+                                    COMMON = Ext.ComponentQuery.query('data')[0].getForm().getValues();
                                 },
                                 failure: function () {
                                 }
@@ -185,33 +100,33 @@ Ext.define('Pressure.view.data.Data', {
                     items: [
                         {
                             fieldLabel: 'Customer',
-                            itemId: 'customerField',
-                            name: 'customer'
+                            itemId: 'CUSTOMER',
+                            name: 'CUSTOMER'
                         },
                         {
                             fieldLabel: 'Location',
-                            itemId: 'locationField',
-                            name: 'lacation'
+                            itemId: 'LOCATION',
+                            name: 'LOCATION'
                         },
                         {
                             fieldLabel: 'Fluid',
-                            itemId: 'fluidField',
-                            name: 'fluid'
+                            itemId: 'FLUID',
+                            name: 'FLUID'
                         },
                         {
                             fieldLabel: 'Maker',
-                            itemId: 'makerField',
-                            name: 'maker'
+                            itemId: 'MAKER',
+                            name: 'MAKER'
                         },
                         {
                             fieldLabel: 'Type',
-                            itemId: 'typeField',
-                            name: 'type'
+                            itemId: 'TEST_TYPE',
+                            name: 'TEST_TYPE'
                         },
                         {
                             fieldLabel: 'Serial NO',
-                            itemId: 'serialNoField',
-                            name: 'serialNo'
+                            itemId: 'SERIAL_NO',
+                            name: 'SERIAL_NO'
                         }
                     ]
                 },
@@ -226,8 +141,8 @@ Ext.define('Pressure.view.data.Data', {
                         {
                             xtype: 'numberfield',
                             fieldLabel: 'Size In',
-                            itemId: 'sizeInField',
-                            name: 'sizeIn',
+                            itemId: 'INLET_SIZE',
+                            name: 'INLET_SIZE',
                             hideTrigger: true,
                             allowBlank: false,
                             minValue: 0,
@@ -237,8 +152,8 @@ Ext.define('Pressure.view.data.Data', {
                         {
                             xtype: 'numberfield',
                             fieldLabel: 'Size Out',
-                            itemId: 'sizeOutField',
-                            name: 'sizeOut',
+                            itemId: 'OUTLET_SIZE',
+                            name: 'OUTLET_SIZE',
                             hideTrigger: true,
                             allowBlank: false,
                             minValue: 0,
@@ -248,25 +163,25 @@ Ext.define('Pressure.view.data.Data', {
                         {
                             xtype: 'numberfield',
                             fieldLabel: 'Set Pressure',
-                            itemId: 'setPressureField',
-                            name: 'setPressure'
+                            itemId: 'SET_PRESS',
+                            name: 'SET_PRESS'
                         },
                         {
                             xtype: 'numberfield',
                             fieldLabel: 'Back Pressure',
-                            itemId: 'backPressureField',
-                            name: 'backPressure'
+                            itemId: 'BACK_PRESS',
+                            name: 'BACK_PRESS'
                         },
                         {
                             fieldLabel: 'Pressure Type',
-                            itemId: 'pressureTypeField',
-                            name: 'pressureType'
+                            itemId: 'VELVE_TYPE',
+                            name: 'VELVE_TYPE'
                         },
                         {
                             xtype: 'datefield',
-                            itemId: 'testDateField',
                             fieldLabel: 'Test Date',
-                            name: 'testDate',
+                            itemId: 'TEST_DATE',
+                            name: 'TEST_DATE',
                             renderer: function (value) {
                                 return App.Util.Date.format(new Date(), 'yyyy-MM-dd HH:mm:ss');
 //                                return App.Util.Date.format(new Date(value), 'yyyy-MM-dd HH:mm:ss');
@@ -301,8 +216,8 @@ Ext.define('Pressure.view.data.Data', {
                         {
                             xtype: 'numberfield',
                             fieldLabel: 'Adjust Screw',
-                            itemId: 'adjustScrewField',
-                            name: 'adjustScrew',
+                            itemId: 'ADJUST_SCREW',
+                            name: 'ADJUST_SCREW',
                             hideTrigger: true,
                             allowBlank: false,
                             minValue: 0,
@@ -311,8 +226,8 @@ Ext.define('Pressure.view.data.Data', {
                         {
                             xtype: 'numberfield',
                             fieldLabel: 'Uppering',
-                            itemId: 'upperingField',
-                            name: 'uppering',
+                            itemId: 'UPPERING',
+                            name: 'UPPERING',
                             hideTrigger: true,
                             allowBlank: false,
                             minValue: 0,
@@ -322,8 +237,8 @@ Ext.define('Pressure.view.data.Data', {
                         {
                             xtype: 'numberfield',
                             fieldLabel: 'Lowering',
-                            itemId: 'loweringField',
-                            name: 'lowering',
+                            itemId: 'LOWERING',
+                            name: 'LOWERING',
                             hideTrigger: true,
                             allowBlank: false,
                             minValue: 0,
@@ -342,28 +257,26 @@ Ext.define('Pressure.view.data.Data', {
                     items: [
                         {
                             fieldLabel: 'Worker',
-                            itemId: 'workerField',
-                            name: 'worker'
+                            itemId: 'WORKER',
+                            name: 'WORKER'
                         },
                         {
                             fieldLabel: 'Inspector',
-                            itemId: 'inspectorField',
-                            name: 'inspector'
+                            itemId: 'INSPECTOR',
+                            name: 'INSPECTOR'
                         },
                         {
                             fieldLabel: 'Manager',
-                            itemId: 'managerField',
-                            name: 'manager'
+                            itemId: 'MANAGER',
+                            name: 'MANAGER'
                         }
                     ]
                 }
             ]
-        }
+        },
     ],
     bbarCfg:{
-        buttonAlign:'center'  //for center align
-        // buttonAlign:'left' //for left align
-        // buttonAlign:'right' //for right align
+        buttonAlign:'center'
     },
     bbar: [
         '->',
@@ -379,96 +292,14 @@ Ext.define('Pressure.view.data.Data', {
             xtype: 'button',
             scale: 'medium',
             text: 'SAVE',
-            handler: function (btn) {
-                var params = {
-                    psvNo: Ext.ComponentQuery.query('#psvNoField')[0].getValue(),
-                    customerField: Ext.ComponentQuery.query('#customerField')[0].getValue(),
-                    locationField: Ext.ComponentQuery.query('#locationField')[0].getValue(),
-                    fluidField: Ext.ComponentQuery.query('#fluidField')[0].getValue(),
-                    makerField: Ext.ComponentQuery.query('#makerField')[0].getValue(),
-                    typeField: Ext.ComponentQuery.query('#typeField')[0].getValue(),
-                    serialNoField: Ext.ComponentQuery.query('#serialNoField')[0].getValue(),
-                    sizeInField: Ext.ComponentQuery.query('#sizeInField')[0].getValue(),
-                    sizeOutField: Ext.ComponentQuery.query('#sizeOutField')[0].getValue(),
-                    setPressureField: Ext.ComponentQuery.query('#setPressureField')[0].getValue(),
-                    backPressureField: Ext.ComponentQuery.query('#backPressureField')[0].getValue(),
-                    pressureTypeField: Ext.ComponentQuery.query('#pressureTypeField')[0].getValue(),
-                    testDateField: Ext.ComponentQuery.query('#testDateField')[0].getValue(),
-                    adjustScrewField: Ext.ComponentQuery.query('#adjustScrewField')[0].getValue(),
-                    upperingField: Ext.ComponentQuery.query('#upperingField')[0].getValue(),
-                    loweringField: Ext.ComponentQuery.query('#loweringField')[0].getValue(),
-                    workerField: Ext.ComponentQuery.query('#workerField')[0].getValue(),
-                    inspectorField: Ext.ComponentQuery.query('#inspectorField')[0].getValue(),
-                    managerField: Ext.ComponentQuery.query('#managerField')[0].getValue()
-                }
-
-                Ext.Ajax.request({
-                    url: '/sheet/save',
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json; charset=utf-8;'
-                    },
-                    params: Ext.encode(params),
-                    success: function () {
-                        Ext.toast({
-                            html: 'Save success.',
-                            closable: false,
-                            align: 't',
-                            slideInDuration: 200,
-                            minWidth: 400
-                        });
-                    },
-                    failure: function () {
-                        Ext.toast({
-                            html: 'Save fail.',
-                            closable: false,
-                            align: 't',
-                            slideInDuration: 200,
-                            minWidth: 400
-                        });
-                    }
-                });
-            }
+            handler: 'onSaveSheetMetaClick'
         },
         {
             itemId: 'deleteSheetMeta',
             xtype: 'button',
             scale: 'medium',
             text: 'DELETE',
-            handler: function (btn) {
-                Ext.Ajax.request({
-                    url: '/sheet/delete',
-                    method: 'GET',
-                    params: {
-                        PSVNo: Ext.ComponentQuery.query('#psvNo')[0].getValue()
-                    },
-                    success: function () {
-                        Ext.ComponentQuery.query('#psvNo')[0].setValue('');
-                        Ext.ComponentQuery.query('#customerField')[0].setValue('');
-                        Ext.ComponentQuery.query('#locationField')[0].setValue('');
-                        Ext.ComponentQuery.query('#fluidField')[0].setValue('');
-                        Ext.ComponentQuery.query('#makerField')[0].setValue('');
-                        Ext.ComponentQuery.query('#typeField')[0].setValue('');
-                        Ext.ComponentQuery.query('#serialNoField')[0].setValue('');
-                        Ext.ComponentQuery.query('#sizeInField')[0].setValue('');
-                        Ext.ComponentQuery.query('#sizeOutField')[0].setValue('');
-                        Ext.ComponentQuery.query('#setPressureField')[0].setValue('');
-                        Ext.ComponentQuery.query('#backPressureField')[0].setValue('');
-                        Ext.ComponentQuery.query('#pressureTypeField')[0].setValue('');
-                        Ext.ComponentQuery.query('#testDateField')[0].setValue('');
-                        Ext.ComponentQuery.query('#adjustScrewField')[0].setValue('');
-                        Ext.ComponentQuery.query('#upperingField')[0].setValue('');
-                        Ext.ComponentQuery.query('#loweringField')[0].setValue('');
-                        Ext.ComponentQuery.query('#workerField')[0].setValue('');
-                        Ext.ComponentQuery.query('#inspectorField')[0].setValue('');
-                        Ext.ComponentQuery.query('#managerField')[0].setValue('');
-                        Ext.ComponentQuery.query('#psvNo')[0].getStore().reload();
-                    },
-                    failure: function () {
-                    }
-                });
-            }
+            handler: 'onDeleteSheetMetaClick'
         },
         {
             xtype: 'button',

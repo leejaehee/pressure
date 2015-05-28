@@ -13,7 +13,7 @@ Ext.define('Pressure.view.rightProps.RightPropsModel', {
     stores: {
         psvNoComboStore: {
             fields: [
-                'psvNo'
+                'PSV_NO'
             ],
             proxy: {
                 type: 'ajax',
@@ -23,25 +23,6 @@ Ext.define('Pressure.view.rightProps.RightPropsModel', {
                     rootProperty: 'list'
                 }
             }
-        },
-        samplePsvNoComboStore: {
-            fields: [
-                'psvNo'
-            ],
-            data: [
-                {
-                    psvNo: 'PSV-6101'
-                },
-                {
-                    psvNo: 'SV-6912'
-                },
-                {
-                    psvNo: 'SV-6333'
-                },
-                {
-                    psvNo: 'SV-6500'
-                }
-            ]
         },
         pressureGridStore: {
             autoLoad: false,

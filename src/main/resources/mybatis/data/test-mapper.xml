@@ -30,74 +30,14 @@
     <insert id="createTest" parameterType="Map" useGeneratedKeys="true" keyProperty="id" keyColumn="ID">
         INSERT INTO TEST
         (ID,
-        TEST_NO,
-        STEP,
-        FIRST_TIME,
-        FIRST_VALUE,
-        FLUID,
-        SERIAL_NO,
-        LOCATION,
-        MAKER,
-        VELVE_TYPE,
-        INLET_SIZE,
-        OUTLET_SIZE,
-        TEST_DATE,
-        SET_PRESS,
-        BACK_PRESS,
-        COLD_PRESS,
-        RESULT_SET_PRESS,
-        RESULT_COLD_PRESS,
-        RESULT_BACK_PRESS,
-        RESULT_POP_PRESS,
-        RESULT_LEAK_PRESS,
-        RESULT_OK,
-        ADJUST_SCREW,
-        UPPERING,
-        LOWERING,
-        WORKER,
-        INSPECTOR,
-        MANAGER,
-        CONF_PORT,
-        CONF_BAUDRATE,
-        CONF_SET_PRESS,
-        CONF_SCAN_TIME,
-        CONF_PRESS_UNIT,
-        TEST_ID)
+        TEST_ID,
+        TEST_TIME,
+        TEST_VALUE)
         VALUES
         (null,
-        #{historyNo},
-        #{customerField},
-        #{typeField},
-        #{psvNo},
-        #{fluidField},
-        #{serialNoField},
-        #{locationField},
-        #{makerField},
-        #{pressureTypeField},
-        #{sizeInField},
-        #{sizeOutField},
-        #{testDateField},
-        #{setPressureField},
-        #{backPressureField},
-        #{coldPressureField},
-        #{resultSetPressureField},
-        #{resultColdPressureField},
-        #{resultBackPressureField},
-        #{resultPopPressureField},
-        #{resultLeakPressureField},
-        #{resultOKPressureField},
-        #{adjustScrewField},
-        #{upperingField},
-        #{loweringField},
-        #{workerField},
-        #{inspectorField},
-        #{managerField},
-        #{portConf},
-        #{baudrateConf},
-        #{setPressureConf},
-        #{scanTimeConf},
-        #{pressureUnitConf},
-        #{testId});
+        #{testId},
+        #{testTime},
+        #{testValue});
     </insert>
 
     <!-- ==================================================================================== -->
@@ -105,8 +45,7 @@
     <!-- ==================================================================================== -->
 
 
-
     <!-- ==================================================================================== -->
     <!-- 6. Delete Statements -->
     <!-- ==================================================================================== -->
- </mapper>
+</mapper>

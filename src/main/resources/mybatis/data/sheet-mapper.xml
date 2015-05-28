@@ -19,7 +19,7 @@
 
     <select id="selectByPSVNo" resultType="map">
         SELECT * FROM SHEET
-        WHERE PSV_NO = #{PSVNo}
+        WHERE PSV_NO = #{PSV_NO}
     </select>
 
     <select id="selectPSVList" resultType="String">
@@ -39,7 +39,7 @@
         INSERT INTO SHEET
         (PSV_NO)
         VALUES
-        (#{psvNo})
+        (#{PSV_NO})
     </insert>
 
     <!-- ==================================================================================== -->
@@ -49,25 +49,25 @@
     <update id="updateByPSVNo" parameterType="Map">
         UPDATE SHEET
         SET
-          CUSTOMER = #{customerField},
-          LOCATION = #{locationField},
-          FLUID = #{fluidField},
-          MAKER = #{makerField},
-          TEST_TYPE = #{typeField},
-          SERIAL_NO = #{serialNoField},
-          INLET_SIZE = #{sizeInField},
-          OUTLET_SIZE = #{sizeOutField},
-          SET_PRESS = #{setPressureField},
-          BACK_PRESS = #{backPressureField},
-          VELVE_TYPE = #{pressureTypeField},
-          TEST_DATE = #{testDateField},
-          ADJUST_SCREW = #{adjustScrewField},
-          UPPERING = #{upperingField},
-          LOWERING = #{loweringField},
-          WORKER = #{workerField},
-          INSPECTOR = #{inspectorField},
-          MANAGER = #{managerField}
-      WHERE PSV_NO = #{psvNo}
+          CUSTOMER = #{CUSTOMER},
+          LOCATION = #{LOCATION},
+          FLUID = #{FLUID},
+          MAKER = #{MAKER},
+          TEST_TYPE = #{TEST_TYPE},
+          SERIAL_NO = #{SERIAL_NO},
+          INLET_SIZE = #{INLET_SIZE},
+          OUTLET_SIZE = #{OUTLET_SIZE},
+          SET_PRESS = #{SET_PRESS},
+          BACK_PRESS = #{BACK_PRESS},
+          VELVE_TYPE = #{VELVE_TYPE},
+          TEST_DATE = #{TEST_DATE},
+          ADJUST_SCREW = #{ADJUST_SCREW},
+          UPPERING = #{UPPERING},
+          LOWERING = #{LOWERING},
+          WORKER = #{WORKER},
+          INSPECTOR = #{INSPECTOR},
+          MANAGER = #{MANAGER}
+      WHERE PSV_NO = #{PSV_NO}
     </update>
 
     <!-- ==================================================================================== -->
@@ -75,6 +75,6 @@
     <!-- ==================================================================================== -->
     <delete id="deleteByPSVNo">
         DELETE FROM SHEET
-        WHERE PSV_NO = #{PSVNo}
+        WHERE PSV_NO = #{PSV_NO}
     </delete>
 </mapper>

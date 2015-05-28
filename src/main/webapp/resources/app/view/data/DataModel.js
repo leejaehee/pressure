@@ -13,7 +13,7 @@ Ext.define('Pressure.view.data.DataModel', {
     stores: {
         psvNoComboStore: {
             fields: [
-                'psvNo'
+                'PSV_NO'
             ],
             autoLoad: true,
             proxy: {
@@ -26,25 +26,6 @@ Ext.define('Pressure.view.data.DataModel', {
                     idProperty: 'id'
                 }
             }
-        },
-        samplePsvNoComboStore: {
-            fields: [
-                'psvNo'
-            ],
-            data: [
-                {
-                    psvNo: 'PSV-6101'
-                },
-                {
-                    psvNo: 'SV-6912'
-                },
-                {
-                    psvNo: 'SV-6333'
-                },
-                {
-                    psvNo: 'SV-6500'
-                }
-            ]
         }
     }
     //TODO - add data, formulas and/or methods to support your view
