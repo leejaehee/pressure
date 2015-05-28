@@ -25,6 +25,11 @@ Ext.define('Pressure.view.data.DataModel', {
                     totalProperty: 'total',
                     idProperty: 'id'
                 }
+            },
+            listeners:{
+                load: function(){
+                    Ext.ComponentQuery.query('data')[0].getForm().setValues(COMMON);
+                }
             }
         }
     }
