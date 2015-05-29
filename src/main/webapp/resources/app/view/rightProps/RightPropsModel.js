@@ -27,14 +27,12 @@ Ext.define('Pressure.view.rightProps.RightPropsModel', {
         pressureGridStore: {
             autoLoad: false,
             fields: [
-                'pressureValueNo',
                 'accumaltedTime',
                 {
                     name: 'pressureValue',
                     convert: function (value) {
                         return value;
                     }
-
                 }
             ],
             proxy: {
@@ -50,27 +48,6 @@ Ext.define('Pressure.view.rightProps.RightPropsModel', {
                     idProperty: 'id'
                 }
             }
-        },
-        samplePressureGridStore: {
-            autoLoad: false,
-            fields: [
-                'pressureValueNo',
-                'accumaltedTime',
-                'pressureValue'
-            ],
-            data: [
-                {
-                    "pressureValueNo": "1",
-                    "accumaltedTime": "1.00",
-                    "pressureValue": "10.00"
-                },
-                {
-                    "pressureValueNo": "2",
-                    "accumaltedTime": "2.01",
-                    "pressureValue": "10.00"
-                }
-
-            ]
         }
     }
 

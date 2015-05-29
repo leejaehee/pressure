@@ -46,14 +46,13 @@ public class PaintGraph extends Thread {
 
             while (true) {
                 Map map = new HashMap();
-                Date date = new Date();
-                String s = date.toString();
+                long currentTimeMillis = System.currentTimeMillis();
                 map.put("testId", this.getName());
-                map.put("testTime", s);
+                map.put("testTime", currentTimeMillis);
                 map.put("testValue", "2");
                 testService.createTest(map);
-                this.session.getBasicRemote().sendText(s + ",2");
-                Thread.sleep(1000);
+                this.session.getBasicRemote().sendText(currentTimeMillis + ",2");
+                Thread.sleep(970);
             }
         } catch (InterruptedException e) {
             e.printStackTrace();

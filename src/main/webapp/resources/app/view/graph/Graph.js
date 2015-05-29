@@ -149,8 +149,17 @@ Ext.define('Pressure.view.graph.Graph', {
                         success: function () {
                             var websocket = new WebSocket("ws://localhost:8080/websocket/desktop-client");
                             websocket.onmessage = function (evnt) {
-                                // TODO grid and graph update
-                                Ext.ComponentQuery.query('#pressureUnit')[0].setValue(Ext.ComponentQuery.query('#pressureUnit')[0].getValue() + ' : ' + evnt.data);
+                                if(evnt.data != ''){
+                                    var splitData = evnt.data.split(',');
+                                    var time = splitData[0];
+                                    var value = splitData[1];
+
+                                    var gridStore = Ext.ComponentQuery.query('#pressureGrid')[0].getStore();
+                                    gridStore.add({
+                                        accumaltedTime: time,
+                                        pressureValue: value
+                                    });
+                                }
                             };
                             websocket.onerror = function (evnt) {
                                 alert('ERROR: ' + evnt.data);

@@ -387,13 +387,24 @@ Ext.define('Pressure.view.rightProps.RightProps', {
                     items: [
                         {
                             xtype: 'grid',
+                            itemId: 'pressureGrid',
                             bind: {
-//                                store: '{pressureGridStore}'// FIXME after added store then replace this
-                                store: '{samplePressureGridStore}'
+                                store: '{pressureGridStore}'
                             },
+                            height: 380,
+                            scrollable: 'y',
                             columns: [
-                                {text: 'No', dataIndex: 'pressureValueNo', width: 77, align: 'center'},
-                                {text: 'Accumalted Time', dataIndex: 'accumaltedTime', width: 110, align: 'center'},
+                                {xtype: 'rownumberer'},
+                                {
+                                    text: 'Accumalted Time', dataIndex: 'accumaltedTime', width: 110, align: 'center',
+                                    renderer: function (data) {
+                                        if (this.getStore().getCount() == 1) {
+                                            return 0;
+                                        } else {
+                                            return ((data - this.getStore().getAt(0).get('accumaltedTime')) / 1000).toFixed(2);
+                                        }
+                                    }
+                                },
                                 {text: 'value', dataIndex: 'pressureValue', width: 110, align: 'center'}
                             ]
                         }

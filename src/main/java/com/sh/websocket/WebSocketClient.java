@@ -8,7 +8,7 @@ public class WebSocketClient {
     @OnOpen
     public void onOpen(Session session) {
         try {
-            session.getBasicRemote().sendText("Hello");
+            session.getBasicRemote().sendText("");
         } catch (IOException ex) {
         }
     }
