@@ -152,8 +152,6 @@ Ext.define('Pressure.view.graph.Graph', {
                             var gridStore = Ext.ComponentQuery.query('#pressureGrid')[0].getStore();
                             gridStore.removeAll();
 
-                            GRAPH_DATA = zingchart.exec('pressureUnit', 'getdata');
-
                             if (GRAPH_DATA.graphset[0].series[0].values.length == 0) {
                                 websocket.onmessage = function (evnt) {
                                     if (evnt.data != '') {
@@ -171,6 +169,8 @@ Ext.define('Pressure.view.graph.Graph', {
                                             accumaltedTime: time,
                                             pressureValue: value
                                         });
+
+                                        GRAPH_DATA = zingchart.exec('pressureUnit', 'getdata');
                                     }
                                 };
                             } else {
@@ -199,6 +199,8 @@ Ext.define('Pressure.view.graph.Graph', {
                                             accumaltedTime: time,
                                             pressureValue: value
                                         });
+
+                                        GRAPH_DATA = zingchart.exec('pressureUnit', 'getdata');
                                     }
                                 };
                             }
