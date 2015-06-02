@@ -28,11 +28,11 @@ Ext.define('Pressure.view.graph.Graph', {
 
     items: [
         {
-            region: 'center',
-            xtype: 'textfield',
+            xtype: 'label',
             itemId: 'pressureUnit',
+            id: 'pressureUnit',
             readOnly: true,
-            value: 'Pressure (Mpa)'
+            flex: 1
         }
     ],
 
@@ -148,19 +148,61 @@ Ext.define('Pressure.view.graph.Graph', {
                         params: Ext.encode(params),
                         success: function () {
                             var websocket = new WebSocket("ws://localhost:8080/websocket/desktop-client");
-                            websocket.onmessage = function (evnt) {
-                                if(evnt.data != ''){
-                                    var splitData = evnt.data.split(',');
-                                    var time = splitData[0];
-                                    var value = splitData[1];
 
-                                    var gridStore = Ext.ComponentQuery.query('#pressureGrid')[0].getStore();
-                                    gridStore.add({
-                                        accumaltedTime: time,
-                                        pressureValue: value
-                                    });
-                                }
-                            };
+                            var gridStore = Ext.ComponentQuery.query('#pressureGrid')[0].getStore();
+                            gridStore.removeAll();
+
+                            GRAPH_DATA = zingchart.exec('pressureUnit', 'getdata');
+
+                            if (GRAPH_DATA.graphset[0].series[0].values.length == 0) {
+                                websocket.onmessage = function (evnt) {
+                                    if (evnt.data != '') {
+                                        var splitData = evnt.data.split(',');
+                                        var time = splitData[0];
+                                        var value = splitData[1];
+
+                                        zingchart.exec("pressureUnit", "appendseriesvalues", {
+                                            "values": [
+                                                [Math.floor(Math.random() * (100 - 0 + 1)) + 0]
+                                            ]
+                                        });
+
+                                        gridStore.add({
+                                            accumaltedTime: time,
+                                            pressureValue: value
+                                        });
+                                    }
+                                };
+                            } else {
+                                websocket.onmessage = function (evnt) {
+                                    if (evnt.data != '') {
+                                        var splitData = evnt.data.split(',');
+                                        var time = splitData[0];
+                                        var value = splitData[1];
+
+                                        zingchart.exec("pressureUnit", "appendseriesvalues", {
+                                            "values": [
+                                                [],
+                                                [Math.floor(Math.random() * (100 - 0 + 1)) + 0]
+                                            ]
+                                        });
+
+                                        zingchart.exec("pressureUnit","removenode",{
+                                            plotindex : 0,
+                                            data : {
+                                                plotindex : 0,
+                                                nodeindex : 0
+                                            }
+                                        });
+
+                                        gridStore.add({
+                                            accumaltedTime: time,
+                                            pressureValue: value
+                                        });
+                                    }
+                                };
+                            }
+
                             websocket.onerror = function (evnt) {
                                 alert('ERROR: ' + evnt.data);
                             };
@@ -201,5 +243,89 @@ Ext.define('Pressure.view.graph.Graph', {
             text: 'TEST SETTING',
             handler: 'onConfClick'
         }
-    ]
+    ],
+    listeners: {
+        afterrender: function () {
+            GRAPH_DATA = {
+                "graphset": [
+                    {
+                        "background-color": "white",
+                        "type": "line",
+                        "legend": {
+                            "layout": "float",
+                            "width": "30%",
+                            "position": "50% 99%",
+                            "margin-top": 47,
+                            "border-width": "0",
+                            "shadow": false,
+                            "marker": {
+                                "cursor": "hand",
+                                "border-width": "0"
+                            },
+                            "background-color": "white",
+                            "item": {
+                                "cursor": "hand"
+                            },
+                            "toggle-action": "remove"
+                        },
+                        "scaleY": {
+                            "line-color": "#333"
+                        },
+                        "tooltip": {
+                            "text": "%t pressure : %v , time : %k s)"
+                        },
+                        "plot": {
+                            "line-width": 3,
+                            "marker": {
+                                "size": 2
+                            },
+                            "selection-mode": "multiple",
+                            "background-mode": "graph",
+                            "selected-state": {
+                                "line-width": 4
+                            },
+                            "background-state": {
+                                "line-color": "#eee",
+                                "marker": {
+                                    "background-color": "none"
+                                }
+                            }
+                        },
+                        "plotarea": {
+                            "width": "100%",
+                            "height": "95%"
+                        },
+                        "series": [
+                            {
+                                "values": [],
+                                "text": "First Test",
+                                "line-color": "#a6cee3",
+                                "marker": {
+                                    "background-color": "#a6cee3",
+                                    "border-color": "#a6cee3"
+                                }
+                            },
+                            {
+                                "values": [],
+                                "text": "Second Test",
+                                "line-color": "#1f78b4",
+                                "marker": {
+                                    "background-color": "#1f78b4",
+                                    "border-color": "#1f78b4"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            };
+        },
+        resize: function (panel, width, height, oldWidth, oldHeight, eOpts) {
+            zingchart.render({
+                id: 'pressureUnit',
+                width: width,
+                height: height,
+                data: GRAPH_DATA
+            });
+        }
+    }
 });

@@ -394,7 +394,9 @@ Ext.define('Pressure.view.rightProps.RightProps', {
                             height: 380,
                             scrollable: 'y',
                             columns: [
-                                {xtype: 'rownumberer'},
+                                {
+                                    xtype: 'rownumberer'
+                                },
                                 {
                                     text: 'Accumalted Time', dataIndex: 'accumaltedTime', width: 110, align: 'center',
                                     renderer: function (data) {
