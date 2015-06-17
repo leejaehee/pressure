@@ -3,7 +3,6 @@
  * "autoCreateViewport" property. That setting automatically applies the "viewport"
  * plugin to promote that instance of this class to the body element.
  *
- * TODO - Replace this content of this view to suite the needs of your application.
  */
 Ext.define('Pressure.view.graph.Graph', {
     extend: 'Ext.panel.Panel',
@@ -33,6 +32,13 @@ Ext.define('Pressure.view.graph.Graph', {
             id: 'pressureUnit',
             readOnly: true,
             flex: 1
+        },
+        {
+            xtype: 'label',
+            itemId: 'currentStepHidden',
+            id: 'currentStepHidden',
+            value: 0,
+            hidden: true
         }
     ],
 
@@ -49,18 +55,6 @@ Ext.define('Pressure.view.graph.Graph', {
             xtype: 'button',
             scale: 'medium',
             text: 'SAVE'
-        },
-        {
-            itemId: 'firstTest',
-            xtype: 'button',
-            scale: 'medium',
-            text: 'FIRST TEST'
-        },
-        {
-            itemId: 'secondTest',
-            xtype: 'button',
-            scale: 'medium',
-            text: 'SECOND TEST'
         },
         {
             itemId: 'sheetPrint',
@@ -92,12 +86,9 @@ Ext.define('Pressure.view.graph.Graph', {
                     }
                     // TODO UI에서 setHistoryId 가져와야 한다.
                     var setHistoryId = 'setHistory_' + new Date().getTime() + '_' + Math.floor((Math.random() * 100) + 1);
-                    // TODO UI에서 step 가져와야 한다.
-                    var step = 1;
-                    // historyId는 항상 생성한다.
+                    var step = Ext.ComponentQuery.query('#currentStepHidden')[0].value + 1;
                     var historyId = 'history_' + new Date().getTime() + '_' + Math.floor((Math.random() * 100) + 1);
                     var PSV_NO = Ext.ComponentQuery.query('#PSV_NO')[0].getValue();
-                    // testId는 항상 생성한다.
                     var testId = 'test_' + new Date().getTime() + '_' + Math.floor((Math.random() * 100) + 1);
 
                     var params = {
@@ -149,19 +140,21 @@ Ext.define('Pressure.view.graph.Graph', {
                         success: function () {
                             var websocket = new WebSocket("ws://localhost:8080/websocket/desktop-client");
 
+                            Ext.ComponentQuery.query('#currentStepHidden')[0].value = Ext.ComponentQuery.query('#currentStepHidden')[0].value + 1
+
                             var gridStore = Ext.ComponentQuery.query('#pressureGrid')[0].getStore();
                             gridStore.removeAll();
 
-                            if (GRAPH_DATA.graphset[0].series[0].values.length == 0) {
-                                websocket.onmessage = function (evnt) {
-                                    if (evnt.data != '') {
-                                        var splitData = evnt.data.split(',');
-                                        var time = splitData[0];
-                                        var value = splitData[1];
+                            websocket.onmessage = function (evnt) {
+                                if (evnt.data != '') {
+                                    var splitData = evnt.data.split(',');
+                                    var time = splitData[0];
+                                    var value = splitData[1];
 
+                                    if (step == 1) {
                                         zingchart.exec("pressureUnit", "appendseriesvalues", {
                                             "values": [
-                                                [Math.floor(Math.random() * (100 - 0 + 1)) + 0]
+                                                [eval(value)]
                                             ]
                                         });
 
@@ -169,29 +162,19 @@ Ext.define('Pressure.view.graph.Graph', {
                                             accumaltedTime: time,
                                             pressureValue: value
                                         });
-
-                                        GRAPH_DATA = zingchart.exec('pressureUnit', 'getdata');
-                                    }
-                                };
-                            } else {
-                                websocket.onmessage = function (evnt) {
-                                    if (evnt.data != '') {
-                                        var splitData = evnt.data.split(',');
-                                        var time = splitData[0];
-                                        var value = splitData[1];
-
+                                    } else {
                                         zingchart.exec("pressureUnit", "appendseriesvalues", {
                                             "values": [
                                                 [],
-                                                [Math.floor(Math.random() * (100 - 0 + 1)) + 0]
+                                                [eval(value)]
                                             ]
                                         });
 
-                                        zingchart.exec("pressureUnit","removenode",{
-                                            plotindex : 0,
-                                            data : {
-                                                plotindex : 0,
-                                                nodeindex : 0
+                                        zingchart.exec("pressureUnit", "removenode", {
+                                            plotindex: 0,
+                                            data: {
+                                                plotindex: 0,
+                                                nodeindex: 0
                                             }
                                         });
 
@@ -199,11 +182,12 @@ Ext.define('Pressure.view.graph.Graph', {
                                             accumaltedTime: time,
                                             pressureValue: value
                                         });
-
-                                        GRAPH_DATA = zingchart.exec('pressureUnit', 'getdata');
+                                        gridStore.remove(gridStore.last());
                                     }
-                                };
-                            }
+
+                                    GRAPH_DATA = zingchart.exec('pressureUnit', 'getdata');
+                                }
+                            };
 
                             websocket.onerror = function (evnt) {
                                 alert('ERROR: ' + evnt.data);
@@ -256,7 +240,7 @@ Ext.define('Pressure.view.graph.Graph', {
                         "legend": {
                             "layout": "float",
                             "width": "30%",
-                            "position": "50% 99%",
+                            "position": "60% 100",
                             "margin-top": 47,
                             "border-width": "0",
                             "shadow": false,
@@ -271,7 +255,10 @@ Ext.define('Pressure.view.graph.Graph', {
                             "toggle-action": "remove"
                         },
                         "scaleY": {
-                            "line-color": "#333"
+                            "line-color": "#333",
+                            //"values":"0:0.001:0.0001"
+                            //"values":"0.001"
+                            "auto-fit": true
                         },
                         "tooltip": {
                             "text": "%t pressure : %v , time : %k s)"
@@ -299,7 +286,7 @@ Ext.define('Pressure.view.graph.Graph', {
                         },
                         "series": [
                             {
-                                "values": [],
+                                "values": [0.0000],
                                 "text": "First Test",
                                 "line-color": "#a6cee3",
                                 "marker": {
@@ -308,7 +295,7 @@ Ext.define('Pressure.view.graph.Graph', {
                                 }
                             },
                             {
-                                "values": [],
+                                "values": [0.0000],
                                 "text": "Second Test",
                                 "line-color": "#1f78b4",
                                 "marker": {
