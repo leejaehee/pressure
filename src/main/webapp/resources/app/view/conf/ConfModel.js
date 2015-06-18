@@ -72,6 +72,9 @@ Ext.define('Pressure.view.conf.ConfModel', {
                 },
                 {
                     portConf: 'COM19'
+                },
+                {
+                    portConf: 'COM20'
                 }
             ]
         },
@@ -130,25 +133,19 @@ Ext.define('Pressure.view.conf.ConfModel', {
             ],
             data: [
                 {
-                    pressureUnitConf: 'kgf/cm'
+                    pressureUnitConf: 'mbar'
                 },
                 {
                     pressureUnitConf: 'bar'
                 },
                 {
+                    pressureUnitConf: 'kPa'
+                },
+                {
                     pressureUnitConf: 'MPa'
                 },
                 {
-                    pressureUnitConf: 'atm'
-                },
-                {
-                    pressureUnitConf: 'mH₂O'
-                },
-                {
-                    pressureUnitConf: 'mHg'
-                },
-                {
-                    pressureUnitConf: 'lbf/in²'
+                    pressureUnitConf: 'psi'
                 }
             ]
         }

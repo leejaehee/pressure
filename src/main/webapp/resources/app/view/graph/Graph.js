@@ -75,8 +75,17 @@ Ext.define('Pressure.view.graph.Graph', {
                             slideInDuration: 200,
                             minWidth: 400
                         });
-                        console.log(button);
-                        console.log(state);
+                        button.toggle();
+                        return false;
+                    }
+                    if (!Ext.ComponentQuery.query('#scanTimeRigthProps')[0].getValue()) {
+                        Ext.toast({
+                            html: 'Please set scan time.',
+                            closable: false,
+                            align: 't',
+                            slideInDuration: 200,
+                            minWidth: 400
+                        });
                         button.toggle();
                         return false;
                     }

@@ -92,6 +92,9 @@ Ext.define('Pressure.view.rightProps.RightProps', {
                             xtype: 'numberfield',
                             fieldLabel: 'Pressure',
                             itemId: 'SET_PRESS',
+                            hideTrigger: true,
+                            keyNavEnabled: false,
+                            mouseWheelEnabled: false,
                             name: 'SET_PRESS'
                         },
                         {
