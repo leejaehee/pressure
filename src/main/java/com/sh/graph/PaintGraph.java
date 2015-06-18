@@ -28,24 +28,40 @@ public class PaintGraph extends Thread implements SerialPortEventListener {
     String echoMsg;
     SerialPort serialPort;
 
+    String testId;
+    String port;
+    int baudRate;
+    int scanTime;
+
+    public void setTestId(String testId) {
+        this.testId = testId;
+    }
+
+    public void setPort(String port) {
+        this.port = port;
+    }
+
+    public void setBaudRate(int baudRate) {
+        this.baudRate = baudRate;
+    }
+
+    public void setScanTime(int scanTime) {
+        this.scanTime = scanTime;
+    }
+
     @Autowired
     TestService testService;
 
     public void connect() {
         try {
             WebSocketContainer container = ContainerProvider.getWebSocketContainer();
-            String uri = "ws://localhost:8080/websocket/desktop-client";
-            System.out.println("Connecting to " + uri);
-            session = container.connectToServer(WebSocketClient.class, URI.create(uri));
+            session = container.connectToServer(WebSocketClient.class, URI.create("ws://localhost:8080/websocket/desktop-client"));
             try {
-                portId = CommPortIdentifier.getPortIdentifier("COM3");
+                portId = CommPortIdentifier.getPortIdentifier(this.port);
                 serialPort = (SerialPort) portId.open("SerialEcho", 2000);
                 serialPort.addEventListener(this);
                 serialPort.notifyOnDataAvailable(true);
-                serialPort.setSerialPortParams(19200,        // Baud Rate
-                        SerialPort.DATABITS_8,                // Data Bits
-                        SerialPort.STOPBITS_1,                // Stop Bits
-                        SerialPort.PARITY_NONE);             // Parity
+                serialPort.setSerialPortParams(this.baudRate, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
                 serialPort.setRTS(true);
                 serialPort.setDTR(true);
                 br = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
@@ -64,37 +80,20 @@ public class PaintGraph extends Thread implements SerialPortEventListener {
             this.connect();
 
             while (true) {
-                getData();
-                Thread.sleep(970);
+                bw.write("p000");
+                bw.newLine();
+                bw.flush();
+                Thread.sleep(this.scanTime);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void getData() {
-        try {
-            bw.write("p000");
-            bw.newLine();
-            bw.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     public void serialEvent(SerialPortEvent event) {
         switch (event.getEventType()) {
-            case SerialPortEvent.BI:      // Break interrupt
-            case SerialPortEvent.OE:     // Overrun error
-            case SerialPortEvent.FE:      // Framing error
-            case SerialPortEvent.PE:     // Parity error.
-            case SerialPortEvent.CD:     // Carrier detect
-            case SerialPortEvent.CTS:   // Clear to send
-            case SerialPortEvent.DSR:   // Data set ready
-            case SerialPortEvent.RI:      // Ring indicator.
             case SerialPortEvent.OUTPUT_BUFFER_EMPTY:
                 break;             // Output buffer is empty
-
             case SerialPortEvent.DATA_AVAILABLE:
                 try {
                     echoMsg = br.readLine();
@@ -102,12 +101,11 @@ public class PaintGraph extends Thread implements SerialPortEventListener {
                     if (echoMsg != null && split.length > 0) {
                         Map map = new HashMap();
                         long currentTimeMillis = System.currentTimeMillis();
-                        map.put("testId", this.getName());
+                        map.put("testId", this.testId);
                         map.put("testTime", currentTimeMillis);
                         map.put("testValue", split[0]);
                         testService.createTest(map);
                         this.session.getBasicRemote().sendText(currentTimeMillis + "," + split[0]);
-                        System.out.println(split[0]);
                     }
                     bw.write(echoMsg, 0, echoMsg.length());
                     bw.newLine();

@@ -38,8 +38,36 @@ public class GraphController {
         boolean history = historyService.createHistory(params);
 
         // start thread testId를 넘겨주고 thread에서 db로 값을 넣어주도록 시작하면 된다.
-        paintGraph.setName(params.get("testId").toString());
-        if (paintGraph.getState().name().equals("TIMED_WAITING")) {
+        if (params.get("testId") == null) {
+            response.setError("TestId is not available.");
+            response.setSuccess(false);
+            return response;
+        }
+
+        if (params.get("portConf") == null) {
+            response.setError("PortConf is not available.");
+            response.setSuccess(false);
+            return response;
+        }
+
+        if (params.get("baudrateConf") == null) {
+            response.setError("BaudrateConf is not available.");
+            response.setSuccess(false);
+            return response;
+        }
+
+        if (params.get("scanTimeConf") == null) {
+            response.setError("ScanTimeConf is not available.");
+            response.setSuccess(false);
+            return response;
+        }
+
+        paintGraph.setTestId(params.get("testId").toString());
+        paintGraph.setPort(params.get("portConf").toString());
+        paintGraph.setBaudRate((Integer) params.get("baudrateConf"));
+        paintGraph.setScanTime((Integer) params.get("scanTimeConf"));
+
+        if ("TIMED_WAITING".equals(paintGraph.getState().name())) {
             paintGraph.resume();
         } else {
             paintGraph.start();

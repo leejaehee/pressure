@@ -78,6 +78,9 @@ Ext.define('Pressure.view.rightProps.RightProps', {
                                             Ext.ComponentQuery.query('rightProps')[0].getForm().reset();
                                             Ext.ComponentQuery.query('rightProps')[0].getForm().setValues(res.map);
                                             COMMON = res.map;
+                                            if (COMMON.TEST_DATE) {
+                                                Ext.ComponentQuery.query('rightProps #TEST_DATE')[0].setValue(new Date(COMMON.TEST_DATE));
+                                            }
                                         },
                                         failure: function () {
                                         }
@@ -86,6 +89,7 @@ Ext.define('Pressure.view.rightProps.RightProps', {
                             }
                         },
                         {
+                            xtype: 'numberfield',
                             fieldLabel: 'Pressure',
                             itemId: 'SET_PRESS',
                             name: 'SET_PRESS'
@@ -104,11 +108,8 @@ Ext.define('Pressure.view.rightProps.RightProps', {
                             xtype: 'datefield',
                             fieldLabel: 'Test Date',
                             itemId: 'TEST_DATE',
-                            name: 'TEST_DATE',
-                            renderer: function (value) {
-                                return App.Util.Date.format(new Date(), 'yyyy-MM-dd HH:mm:ss');
-//                                return App.Util.Date.format(new Date(value), 'yyyy-MM-dd HH:mm:ss');
-                            }
+                            format: 'Y-m-d',
+                            name: 'TEST_DATE'
                         }
                     ]
                 }
@@ -140,7 +141,7 @@ Ext.define('Pressure.view.rightProps.RightProps', {
                             },
                             items: [
                                 {
-                                    xtype: 'textfield',
+                                    xtype: 'numberfield',
                                     fieldLabel: 'Popping',
                                     labelStyle: 'font: normal 18px tahoma, arial, helvetica, sans-serif; text-align: right; vertical-align: middle;',
                                     fieldStyle: 'background-color: #333; color: green; font: normal 30px tahoma, arial, helvetica, sans-serif; text-align: right;',
@@ -148,6 +149,9 @@ Ext.define('Pressure.view.rightProps.RightProps', {
                                     name: 'poppingPressure',
                                     itemId: 'poppingPressure',
                                     width: 235,
+                                    hideTrigger: true,
+                                    keyNavEnabled: false,
+                                    mouseWheelEnabled: false,
                                     value: '0.00'
                                 },
                                 {
@@ -168,7 +172,7 @@ Ext.define('Pressure.view.rightProps.RightProps', {
                             },
                             items: [
                                 {
-                                    xtype: 'textfield',
+                                    xtype: 'numberfield',
                                     fieldLabel: 'Brow down',
                                     labelStyle: 'font: normal 18px tahoma, arial, helvetica, sans-serif; text-align: right; vertical-align: middle;',
                                     fieldStyle: 'background-color: #333; color: red; font: normal 30px tahoma, arial, helvetica, sans-serif; text-align: right;',
@@ -176,6 +180,9 @@ Ext.define('Pressure.view.rightProps.RightProps', {
                                     name: 'browDownpressure',
                                     itemId: 'browDownpressure',
                                     width: 235,
+                                    hideTrigger: true,
+                                    keyNavEnabled: false,
+                                    mouseWheelEnabled: false,
                                     value: '0.00'
                                 },
                                 {
@@ -196,7 +203,7 @@ Ext.define('Pressure.view.rightProps.RightProps', {
                             },
                             items: [
                                 {
-                                    xtype: 'textfield',
+                                    xtype: 'numberfield',
                                     fieldLabel: 'Leak test',
                                     labelStyle: 'font: normal 18px tahoma, arial, helvetica, sans-serif; text-align: right; vertical-align: middle;',
                                     fieldStyle: 'background-color: #333; color: yellow; font: normal 30px tahoma, arial, helvetica, sans-serif; text-align: right;',
@@ -204,6 +211,9 @@ Ext.define('Pressure.view.rightProps.RightProps', {
                                     name: 'leakTestPressure',
                                     itemId: 'leakTestPressure',
                                     width: 235,
+                                    hideTrigger: true,
+                                    keyNavEnabled: false,
+                                    mouseWheelEnabled: false,
                                     value: '0.00'
                                 },
                                 {
@@ -224,7 +234,7 @@ Ext.define('Pressure.view.rightProps.RightProps', {
                             },
                             items: [
                                 {
-                                    xtype: 'textfield',
+                                    xtype: 'numberfield',
                                     fieldLabel: 'Torrent',
                                     labelStyle: 'font: normal 18px tahoma, arial, helvetica, sans-serif; text-align: right; vertical-align: middle;',
                                     fieldStyle: 'background-color: #333; color: blue; font: normal 30px tahoma, arial, helvetica, sans-serif; text-align: right;',
@@ -232,6 +242,9 @@ Ext.define('Pressure.view.rightProps.RightProps', {
                                     name: 'torrentPressure',
                                     itemId: 'torrentPressure',
                                     width: 235,
+                                    hideTrigger: true,
+                                    keyNavEnabled: false,
+                                    mouseWheelEnabled: false,
                                     value: '0.00'
                                 },
                                 {
@@ -274,13 +287,16 @@ Ext.define('Pressure.view.rightProps.RightProps', {
                             },
                             items: [
                                 {
-                                    xtype: 'textfield',
+                                    xtype: 'numberfield',
                                     fieldLabel: 'Set pressure',
                                     labelStyle: 'font: normal 15px tahoma, arial, helvetica, sans-serif; text-align: right; vertical-align: middle;',
                                     fieldStyle: 'background-color: #333; color: blue; font: normal 20px tahoma, arial, helvetica, sans-serif; text-align: right;',
                                     name: 'settingPressure',
                                     itemId: 'settingPressure',
                                     width: 235,
+                                    hideTrigger: true,
+                                    keyNavEnabled: false,
+                                    mouseWheelEnabled: false,
                                     value: '10.00'
                                 },
                                 {
@@ -301,13 +317,17 @@ Ext.define('Pressure.view.rightProps.RightProps', {
                             },
                             items: [
                                 {
-                                    xtype: 'textfield',
+                                    itemId: 'scanTimeRigthProps',
+                                    xtype: 'numberfield',
                                     fieldLabel: 'Scan time',
                                     labelStyle: 'font: normal 15px tahoma, arial, helvetica, sans-serif; text-align: right; vertical-align: middle;',
                                     fieldStyle: 'background-color: #333; color: yellow; font: normal 20px tahoma, arial, helvetica, sans-serif; text-align: right;',
                                     name: 'scanTime',
-                                    itemId: 'scanTimeRigthProps',
                                     width: 235,
+                                    allowBlack: false,
+                                    hideTrigger: true,
+                                    keyNavEnabled: false,
+                                    mouseWheelEnabled: false,
                                     value: '1000'
                                 },
                                 {

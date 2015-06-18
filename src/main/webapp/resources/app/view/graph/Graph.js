@@ -57,13 +57,6 @@ Ext.define('Pressure.view.graph.Graph', {
             text: 'SAVE'
         },
         {
-            itemId: 'sheetPrint',
-            xtype: 'button',
-            scale: 'medium',
-            text: 'SHEET PRINT'
-        },
-        '->',
-        {
             itemId: 'startButton',
             xtype: 'button',
             scale: 'medium',
@@ -82,6 +75,9 @@ Ext.define('Pressure.view.graph.Graph', {
                             slideInDuration: 200,
                             minWidth: 400
                         });
+                        console.log(button);
+                        console.log(state);
+                        button.toggle();
                         return false;
                     }
                     // TODO UI에서 setHistoryId 가져와야 한다.
@@ -240,8 +236,9 @@ Ext.define('Pressure.view.graph.Graph', {
                         "legend": {
                             "layout": "float",
                             "width": "30%",
-                            "position": "60% 100",
+                            "position": "60% 100%",
                             "margin-top": 47,
+                            "margin-bottom": 45,
                             "border-width": "0",
                             "shadow": false,
                             "marker": {

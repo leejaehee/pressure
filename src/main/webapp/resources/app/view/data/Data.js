@@ -65,7 +65,11 @@ Ext.define('Pressure.view.data.Data', {
                                     Ext.ComponentQuery.query('data')[0].getForm().setValues(res.map);
                                     Ext.ComponentQuery.query('rightProps')[0].getForm().reset();
                                     Ext.ComponentQuery.query('rightProps')[0].getForm().setValues(res.map);
-                                    COMMON = Ext.ComponentQuery.query('data')[0].getForm().getValues();
+                                    COMMON = res.map;
+                                    if(COMMON.TEST_DATE){
+                                        Ext.ComponentQuery.query('rightProps #TEST_DATE')[0].setValue(new Date(COMMON.TEST_DATE));
+                                        Ext.ComponentQuery.query('data #TEST_DATE')[0].setValue(new Date(COMMON.TEST_DATE));
+                                    }
                                 },
                                 failure: function () {
                                 }
@@ -181,12 +185,8 @@ Ext.define('Pressure.view.data.Data', {
                             xtype: 'datefield',
                             fieldLabel: 'Test Date',
                             itemId: 'TEST_DATE',
-                            name: 'TEST_DATE',
-                            renderer: function (value) {
-                                return App.Util.Date.format(new Date(), 'yyyy-MM-dd HH:mm:ss');
-//                                return App.Util.Date.format(new Date(value), 'yyyy-MM-dd HH:mm:ss');
-                            }
-
+                            format: 'Y-m-d',
+                            name: 'TEST_DATE'
                         }
                     ]
                 }

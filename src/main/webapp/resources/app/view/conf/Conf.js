@@ -63,7 +63,12 @@ Ext.define('Pressure.view.conf.Conf', {
                             valueField: 'portConf',
                             editable: false,
                             name: 'portConf',
-                            itemId: 'portConf'
+                            itemId: 'portConf',
+                            listeners: {
+                                afterrender: function (combo, eOpts) {
+                                    this.value="COM3";
+                                }
+                            }
                         },
                         {
                             xtype: 'combo',
@@ -75,7 +80,12 @@ Ext.define('Pressure.view.conf.Conf', {
                             valueField: 'baudrateConf',
                             editable: false,
                             name: 'baudrateConf',
-                            itemId: 'baudrateConf'
+                            itemId: 'baudrateConf',
+                            listeners: {
+                                afterrender: function (combo, eOpts) {
+                                    this.value="19200";
+                                }
+                            }
                         }
                     ]
                 },
@@ -120,7 +130,9 @@ Ext.define('Pressure.view.conf.Conf', {
                                     xtype: 'textfield',
                                     itemId: 'scanTimeConf',
                                     fieldLabel: 'Scan time',
-                                    name: 'scanTimeConf'
+                                    name: 'scanTimeConf',
+                                    allowBlank: false,
+                                    value: 1000
                                 },
                                 {
                                     xtype: 'label',
@@ -135,12 +147,16 @@ Ext.define('Pressure.view.conf.Conf', {
                                 store: '{unitComboStore}'
                             },
                             allowBlank: false,
-                            autoSelect: true,
                             displayField: 'pressureUnitConf',
                             valueField: 'pressureUnitConf',
                             editable: false,
                             name: 'pressureUnitConf',
-                            itemId: 'pressureUnitConf'
+                            itemId: 'pressureUnitConf',
+                            listeners: {
+                                afterrender: function (combo, eOpts) {
+                                    this.value="MPa";
+                                }
+                            }
                         }
                     ]
                 }
@@ -148,9 +164,7 @@ Ext.define('Pressure.view.conf.Conf', {
         }
     ],
     bbarCfg: {
-        buttonAlign: 'center'  //for center align
-        // buttonAlign:'left' //for left align
-        // buttonAlign:'right' //for right align
+        buttonAlign: 'center'
     },
     bbar: [
         '->',
@@ -160,7 +174,7 @@ Ext.define('Pressure.view.conf.Conf', {
             scale: 'medium',
             text: 'SETTING',
             handler: function (btn) {
-                Ext.ComponentQuery.query('#scanTimeRigthProps')[0].setValue(Ext.ComponentQuery.query('#scanTimeConf')[0].getValue()); // FIXME 그래프 격자 변경 필요
+                Ext.ComponentQuery.query('#scanTimeRigthProps')[0].setValue(Ext.ComponentQuery.query('#scanTimeConf')[0].getValue());
 
                 var unit = Ext.ComponentQuery.query('#pressureUnitConf')[0].getValue(); // FIXME 그래프 단위 변경 필요
 

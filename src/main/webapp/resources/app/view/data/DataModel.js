@@ -15,20 +15,12 @@ Ext.define('Pressure.view.data.DataModel', {
             fields: [
                 'PSV_NO'
             ],
-            autoLoad: true,
             proxy: {
                 type: 'ajax',
-                url: '/sheet/list.json',
+                url: '/sheet/list',
                 reader: {
                     type: 'json',
-                    rootProperty: 'list',
-                    totalProperty: 'total',
-                    idProperty: 'id'
-                }
-            },
-            listeners:{
-                load: function(){
-                    Ext.ComponentQuery.query('data')[0].getForm().setValues(COMMON);
+                    rootProperty: 'list'
                 }
             }
         }
