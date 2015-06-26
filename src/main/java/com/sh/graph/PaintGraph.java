@@ -79,7 +79,7 @@ public class PaintGraph extends Thread implements SerialPortEventListener {
         try {
             this.connect();
 
-            while (true) {
+            while (!Thread.currentThread().isInterrupted()) {
                 bw.write("p000");
                 bw.newLine();
                 bw.flush();

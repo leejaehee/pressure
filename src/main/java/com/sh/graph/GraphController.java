@@ -64,14 +64,15 @@ public class GraphController {
 
         paintGraph.setTestId(params.get("testId").toString());
         paintGraph.setPort(params.get("portConf").toString());
-        paintGraph.setBaudRate((Integer) params.get("baudrateConf"));
-        paintGraph.setScanTime((Integer) params.get("scanTimeConf"));
+        paintGraph.setBaudRate(Integer.parseInt(params.get("baudrateConf").toString()));
+        paintGraph.setScanTime(Integer.parseInt(params.get("scanTimeConf").toString()));
 
         if ("TIMED_WAITING".equals(paintGraph.getState().name())) {
             paintGraph.resume();
         } else {
             paintGraph.start();
         }
+
         response.setSuccess(setHistory && history);
         return response;
     }
@@ -82,19 +83,8 @@ public class GraphController {
     public Response stop() {
         Response response = new Response();
 
+//        paintGraph.interrupt();
         paintGraph.suspend();
-
-        response.setSuccess(true);
-        return response;
-    }
-
-    @RequestMapping("/resume")
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
-    public Response resume() {
-        Response response = new Response();
-
-        paintGraph.resume();
 
         response.setSuccess(true);
         return response;

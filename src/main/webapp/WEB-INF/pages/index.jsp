@@ -11,6 +11,7 @@
     <script type="text/javascript" src="app.js"></script>
     <script type="text/javascript">
         var COMMON = {};
+        var CONF = {};
         var GRAPH_DATA = {};
     </script>
 </head>

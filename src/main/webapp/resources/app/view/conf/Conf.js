@@ -174,18 +174,23 @@ Ext.define('Pressure.view.conf.Conf', {
             scale: 'medium',
             text: 'SETTING',
             handler: function (btn) {
+                Ext.ComponentQuery.query('#settingPressure')[0].setValue(Ext.ComponentQuery.query('#setPressureConf')[0].getValue());
+
                 Ext.ComponentQuery.query('#scanTimeRigthProps')[0].setValue(Ext.ComponentQuery.query('#scanTimeConf')[0].getValue());
 
-                var unit = Ext.ComponentQuery.query('#pressureUnitConf')[0].getValue(); // FIXME 그래프 단위 변경 필요
+                Ext.ComponentQuery.query('#poppingPressureLabel')[0].setText(Ext.ComponentQuery.query('#pressureUnitConf')[0].getValue());
+                Ext.ComponentQuery.query('#browDownpressureLabel')[0].setText(Ext.ComponentQuery.query('#pressureUnitConf')[0].getValue());
+                Ext.ComponentQuery.query('#leakTestPressureLabel')[0].setText(Ext.ComponentQuery.query('#pressureUnitConf')[0].getValue());
+                Ext.ComponentQuery.query('#torrentPressureLabel')[0].setText(Ext.ComponentQuery.query('#pressureUnitConf')[0].getValue());
+                Ext.ComponentQuery.query('#settingPressureLabel')[0].setText(Ext.ComponentQuery.query('#pressureUnitConf')[0].getValue());
+                Ext.ComponentQuery.query('#setPressureConfLabel')[0].setText(Ext.ComponentQuery.query('#pressureUnitConf')[0].getValue());
 
-                Ext.ComponentQuery.query('#poppingPressureLabel')[0].setText(unit);
-                Ext.ComponentQuery.query('#browDownpressureLabel')[0].setText(unit);
-                Ext.ComponentQuery.query('#leakTestPressureLabel')[0].setText(unit);
-                Ext.ComponentQuery.query('#torrentPressureLabel')[0].setText(unit);
-                Ext.ComponentQuery.query('#settingPressureLabel')[0].setText(unit);
-                Ext.ComponentQuery.query('#setPressureConfLabel')[0].setText(unit);
 
-                Ext.ComponentQuery.query('#settingPressure')[0].setValue(Ext.ComponentQuery.query('#setPressureConf')[0].getValue());
+                CONF.portConf = Ext.ComponentQuery.query('#portConf')[0].getValue();
+                CONF.baudrateConf = Ext.ComponentQuery.query('#baudrateConf')[0].getValue();
+                CONF.scanTimeConf = Ext.ComponentQuery.query('#scanTimeConf')[0].getValue();
+                CONF.pressureUnitConf = Ext.ComponentQuery.query('#pressureUnitConf')[0].getValue();
+                CONF.setPressureConf = Ext.ComponentQuery.query('#setPressureConf')[0].getValue();
             }
         },
         {
