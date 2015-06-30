@@ -114,7 +114,7 @@ Ext.define('Pressure.view.conf.Conf', {
                                 {
                                     xtype: 'label',
                                     itemId: 'setPressureConfLabel',
-                                    text: 'Mpa'
+                                    text: 'MPa'
                                 }
                             ]
                         },

@@ -163,7 +163,7 @@ Ext.define('Pressure.view.rightProps.RightProps', {
                                         font: 'normal 15px tahoma, arial, helvetica, sans-serif'
                                     },
                                     itemId: 'poppingPressureLabel',
-                                    text: 'Mpa'
+                                    text: 'MPa'
                                 }
                             ]
                         },
@@ -194,7 +194,7 @@ Ext.define('Pressure.view.rightProps.RightProps', {
                                         font: 'normal 15px tahoma, arial, helvetica, sans-serif'
                                     },
                                     itemId: 'browDownpressureLabel',
-                                    text: 'Mpa'
+                                    text: 'MPa'
                                 }
                             ]
                         },
@@ -225,7 +225,7 @@ Ext.define('Pressure.view.rightProps.RightProps', {
                                         font: 'normal 15px tahoma, arial, helvetica, sans-serif'
                                     },
                                     itemId: 'leakTestPressureLabel',
-                                    text: 'Mpa'
+                                    text: 'MPa'
                                 }
                             ]
                         },
@@ -256,7 +256,7 @@ Ext.define('Pressure.view.rightProps.RightProps', {
                                         font: 'normal 15px tahoma, arial, helvetica, sans-serif'
                                     },
                                     itemId: 'torrentPressureLabel',
-                                    text: 'Mpa'
+                                    text: 'MPa'
                                 }
                             ]
                         }
@@ -308,7 +308,7 @@ Ext.define('Pressure.view.rightProps.RightProps', {
                                         font: 'normal 15px tahoma, arial, helvetica, sans-serif'
                                     },
                                     itemId: 'settingPressureLabel',
-                                    text: 'Mpa'
+                                    text: 'MPa'
                                 }
                             ]
                         },
