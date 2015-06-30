@@ -49,6 +49,14 @@ Ext.define('Pressure.view.graph.GraphController', {
                                 height: window.innerHeight - 45 || document.body.clientHeight - 45,
                                 data: GRAPH_DATA
                             });
+
+                            var gridStore = Ext.ComponentQuery.query('#pressureGrid')[0].getStore();
+                            gridStore.removeAll();
+
+                            Ext.ComponentQuery.query('#poppingPressure')[0].setValue('0');
+                            Ext.ComponentQuery.query('#browDownpressure')[0].setValue('0');
+                            Ext.ComponentQuery.query('#leakTestPressure')[0].setValue('0');
+                            Ext.ComponentQuery.query('#torrentPressure')[0].setValue('0');
                         };
                         reader.onerror = function (evt) {
                             var errcode = evt.target.error.code;
@@ -123,6 +131,95 @@ Ext.define('Pressure.view.graph.GraphController', {
         }).center().show();
     },
     onClearClick: function () {
+        GRAPH_DATA = {
+            "graphset": [
+                {
+                    "background-color": "white",
+                    "type": "line",
+                    "legend": {
+                        "layout": "float",
+                        "width": "30%",
+                        "position": "60% 100%",
+                        "margin-top": 47,
+                        "margin-bottom": 45,
+                        "border-width": "0",
+                        "shadow": false,
+                        "marker": {
+                            "cursor": "hand",
+                            "border-width": "0"
+                        },
+                        "background-color": "white",
+                        "item": {
+                            "cursor": "hand"
+                        },
+                        "toggle-action": "remove"
+                    },
+                    "scaleY": {
+                        "line-color": "#333",
+                        "auto-fit": true
+                    },
+                    "tooltip": {
+                        "text": "%t pressure : %v , time : %k s)"
+                    },
+                    "plot": {
+                        "line-width": 3,
+                        "marker": {
+                            "size": 2
+                        },
+                        "selection-mode": "multiple",
+                        "background-mode": "graph",
+                        "selected-state": {
+                            "line-width": 4
+                        },
+                        "background-state": {
+                            "line-color": "#eee",
+                            "marker": {
+                                "background-color": "none"
+                            }
+                        }
+                    },
+                    "plotarea": {
+                        "width": "100%",
+                        "height": "95%"
+                    },
+                    "series": [
+                        {
+                            "values": [0.0000],
+                            "text": "First Test",
+                            "line-color": "#a6cee3",
+                            "marker": {
+                                "background-color": "#a6cee3",
+                                "border-color": "#a6cee3"
+                            }
+                        },
+                        {
+                            "values": [0.0000],
+                            "text": "Second Test",
+                            "line-color": "#1f78b4",
+                            "marker": {
+                                "background-color": "#1f78b4",
+                                "border-color": "#1f78b4"
+                            }
+                        }
+                    ]
+                }
+            ]
+        };
+
+        zingchart.render({
+            id: 'pressureUnit',
+            width: window.innerWidth - 317 || document.body.clientWidth - 317,
+            height: window.innerHeight - 45 || document.body.clientHeight - 45,
+            data: GRAPH_DATA
+        });
+
+        var gridStore = Ext.ComponentQuery.query('#pressureGrid')[0].getStore();
+        gridStore.removeAll();
+
+        Ext.ComponentQuery.query('#poppingPressure')[0].setValue('0');
+        Ext.ComponentQuery.query('#browDownpressure')[0].setValue('0');
+        Ext.ComponentQuery.query('#leakTestPressure')[0].setValue('0');
+        Ext.ComponentQuery.query('#torrentPressure')[0].setValue('0');
 
     },
     onStartClick: function (button, state) {

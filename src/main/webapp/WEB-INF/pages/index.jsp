@@ -12,6 +12,12 @@
         var COMMON = {};
         var CONF = {};
         var GRAPH_DATA = {};
+
+        CONF.portConf = 'COM3';
+        CONF.baudrateConf = '19200';
+        CONF.scanTimeConf = '1000';
+        CONF.pressureUnitConf = 'MPa';
+        CONF.setPressureConf = '';
     </script>
 </head>
 <body></body>
