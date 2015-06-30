@@ -276,7 +276,7 @@ Ext.define('Pressure.view.graph.GraphController', {
                 success: function () {
                     var websocket = new WebSocket("ws://localhost:8080/websocket/desktop-client");
 
-                    Ext.ComponentQuery.query('#currentStepHidden')[0].value = Ext.ComponentQuery.query('#currentStepHidden')[0].value + 1
+                    Ext.ComponentQuery.query('#currentStepHidden')[0].value = Ext.ComponentQuery.query('#currentStepHidden')[0].value + 1;
 
                     var gridStore = Ext.ComponentQuery.query('#pressureGrid')[0].getStore();
                     gridStore.removeAll();
@@ -342,6 +342,61 @@ Ext.define('Pressure.view.graph.GraphController', {
                     'Content-Type': 'application/json; charset=utf-8;'
                 },
                 success: function () {
+                    // result calc
+                    var step = Ext.ComponentQuery.query('#currentStepHidden')[0].value;
+                    console.log(step);
+                    console.log(GRAPH_DATA.graphset[0]);
+                    console.log(GRAPH_DATA.graphset[0].series);
+                    console.log(GRAPH_DATA.graphset[0].series[step - 1].values);
+                    var seriesArr = GRAPH_DATA.graphset[0].series[step - 1].values;
+
+                    // [0, 0.0001, 0.0001, 0.0001]
+                    var prePos = 0;
+                    var preVal = -10000;
+                    var popVal = 0;
+                    var browVal = 0;
+                    var leakVal = 0;
+
+                    for (var i = 1; i < seriesArr.length; i++) {
+                        if (preVal > seriesArr[i]) {
+                            popVal = preVal;
+                            prePos = i - 1;
+                            break;
+                        }
+                        preVal = seriesArr[i];
+                    }
+
+                    for (var i = prePos; i < seriesArr.length; i++) {
+                        if (preVal < seriesArr[i]) {
+                            browVal = preVal;
+                            prePos = i - 1;
+                            break;
+                        }
+                        preVal = seriesArr[i];
+                    }
+
+                    for (var i = prePos; i < seriesArr.length; i++) {
+                        if (preVal < seriesArr[i]) {
+                            leakVal = seriesArr[i];
+                        }
+                        preVal = seriesArr[i];
+                    }
+
+                    // result setting
+                    Ext.ComponentQuery.query('#poppingPressure')[0].setValue(popVal);
+                    Ext.ComponentQuery.query('#browDownpressure')[0].setValue(browVal);
+                    Ext.ComponentQuery.query('#leakTestPressure')[0].setValue(leakVal);
+                    Ext.ComponentQuery.query('#torrentPressure')[0].setValue(leakVal - browVal);
+
+                    if(Ext.ComponentQuery.query('#settingPressure')[0].getValue() == leakVal){
+                        var textField = Ext.ComponentQuery.query('#testResult')[0];
+                        textField.setValue('SUCCESS');
+                        textField.setFieldStyle('background-color: green; color: white; font: normal 20px tahoma, arial, helvetica, sans-serif;')
+                    }else{
+                        var textField = Ext.ComponentQuery.query('#testResult')[0];
+                        textField.setValue('FAIL');
+                        textField.setFieldStyle('background-color: red; color: yellow; font: normal 20px tahoma, arial, helvetica, sans-serif;');
+                    }
                 },
                 failure: function () {
                 }

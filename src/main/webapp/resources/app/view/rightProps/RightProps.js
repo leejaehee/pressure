@@ -152,10 +152,11 @@ Ext.define('Pressure.view.rightProps.RightProps', {
                                     name: 'poppingPressure',
                                     itemId: 'poppingPressure',
                                     width: 235,
+                                    decimalPrecision: 4,
                                     hideTrigger: true,
                                     keyNavEnabled: false,
                                     mouseWheelEnabled: false,
-                                    value: '0.00'
+                                    value: '0.0000'
                                 },
                                 {
                                     xtype: 'label',
@@ -183,6 +184,7 @@ Ext.define('Pressure.view.rightProps.RightProps', {
                                     name: 'browDownpressure',
                                     itemId: 'browDownpressure',
                                     width: 235,
+                                    decimalPrecision: 4,
                                     hideTrigger: true,
                                     keyNavEnabled: false,
                                     mouseWheelEnabled: false,
@@ -214,6 +216,7 @@ Ext.define('Pressure.view.rightProps.RightProps', {
                                     name: 'leakTestPressure',
                                     itemId: 'leakTestPressure',
                                     width: 235,
+                                    decimalPrecision: 4,
                                     hideTrigger: true,
                                     keyNavEnabled: false,
                                     mouseWheelEnabled: false,
@@ -245,6 +248,7 @@ Ext.define('Pressure.view.rightProps.RightProps', {
                                     name: 'torrentPressure',
                                     itemId: 'torrentPressure',
                                     width: 235,
+                                    decimalPrecision: 4,
                                     hideTrigger: true,
                                     keyNavEnabled: false,
                                     mouseWheelEnabled: false,
@@ -297,10 +301,11 @@ Ext.define('Pressure.view.rightProps.RightProps', {
                                     name: 'settingPressure',
                                     itemId: 'settingPressure',
                                     width: 235,
+                                    decimalPrecision: 4,
                                     hideTrigger: true,
                                     keyNavEnabled: false,
                                     mouseWheelEnabled: false,
-                                    value: '10.00'
+                                    value: '0.001'
                                 },
                                 {
                                     xtype: 'label',
@@ -365,12 +370,13 @@ Ext.define('Pressure.view.rightProps.RightProps', {
                     title: 'Test Result',
                     items: [
                         {
+                            itemId: 'testResult',
                             xtype: 'textfield',
                             width: 297,
-                            fieldStyle: 'background-color: green; color: white; font: normal 20px tahoma, arial, helvetica, sans-serif;',
+                            fieldStyle: 'background-color: white; color: white; font: normal 20px tahoma, arial, helvetica, sans-serif;',
                             editable: false,
                             name: 'testResult',
-                            value: 'SUCCESS',
+                            value: '',
                             listners: {
                                 blur: function (textField, event, eOpts) {
                                     if (textField.getValue() == '') {
