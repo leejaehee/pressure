@@ -15,10 +15,114 @@ Ext.define('Pressure.view.graph.GraphController', {
     alias: 'controller.graph',
 
     onOpenClick: function () {
-        Ext.MessageBox.confirm('Confirm', 'Are you sure you want to do that?', this.showResult, this);
+        var popup = Ext.create('Ext.Window', {
+            title: 'Load graph',
+            layout: 'fit',
+            width: 400,
+            bodyPadding: 10,
+            frame: true,
+            renderTo: Ext.getBody(),
+            items: [{
+                xtype: 'filefield',
+                itemId: 'loadFilefield',
+                name: 'loadFile',
+                fieldLabel: 'File',
+                labelWidth: 50,
+                msgTarget: 'side',
+                allowBlank: false,
+                anchor: '100%',
+                buttonText: 'Select File'
+            }],
+
+            buttons: [
+                {
+                    text: 'Load',
+                    handler: function () {
+                        var file = Ext.ComponentQuery.query('#loadFilefield')[0].fileInputEl.dom.files[0];
+                        var reader = new FileReader();
+                        reader.onload = function () {
+                            GRAPH_DATA = reader.result;
+
+                            zingchart.render({
+                                id: 'pressureUnit',
+                                width: window.innerWidth - 317 || document.body.clientWidth - 317,
+                                height: window.innerHeight - 45 || document.body.clientHeight - 45,
+                                data: GRAPH_DATA
+                            });
+                        };
+                        reader.onerror = function (evt) {
+                            var errcode = evt.target.error.code;
+                            if (errcode == 1) {
+                                alert("File을 찾지 못하였습니다");
+                            } else if (errcode == 2) {
+                                alert("안전하지 못하거나 File에 변경이 있습니다");
+                            } else if (errcode == 3) {
+                                alert("읽기가 중지되었습니다");
+                            } else if (errcode == 4) {
+                                alert("접근권한 문제로 파일을 읽지 못하였습니다");
+                            } else if (errcode == 5) {
+                                alert("URL 길이 제한문제");
+                            }
+                        };
+                        reader.readAsText(file, 'UTF-8');
+                        popup.close();
+                    }
+                },
+                {
+                    text: 'Close',
+                    handler: function () {
+                        popup.close();
+                    }
+                }
+            ]
+        }).center().show();
     },
     onSaveClick: function () {
-        Ext.MessageBox.confirm('Confirm', 'Are you sure you want to do that?', this.showResult, this);
+        var popup = Ext.create('Ext.Window', {
+            title: 'Save graph',
+            layout: 'fit',
+            width: 400,
+            bodyPadding: 10,
+            frame: true,
+            renderTo: Ext.getBody(),
+            items: [{
+                xtype: 'textfield',
+                itemId: 'saveTextfield',
+                name: 'saveFile',
+                fieldLabel: 'Filename',
+                labelWidth: 100,
+                msgTarget: 'side',
+                allowBlank: false,
+                anchor: '100%',
+                buttonText: 'Select File'
+            }],
+
+            buttons: [
+                {
+                    text: 'Save',
+                    handler: function () {
+                        var pom = document.createElement('a');
+                        pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + JSON.stringify(GRAPH_DATA));
+                        pom.setAttribute('download', Ext.ComponentQuery.query('#saveTextfield')[0].value);
+
+                        pom.style.display = 'none';
+                        document.body.appendChild(pom);
+
+                        pom.click();
+
+                        document.body.removeChild(pom);
+                    }
+                },
+                {
+                    text: 'Close',
+                    handler: function () {
+                        popup.close();
+                    }
+                }
+            ]
+        }).center().show();
+    },
+    onClearClick: function () {
 
     },
     onStartClick: function (button, state) {
@@ -45,7 +149,7 @@ Ext.define('Pressure.view.graph.GraphController', {
                 button.toggle();
                 return false;
             }
-            // TODO UI에서 setHistoryId 가져와야 한다.
+
             var setHistoryId = 'setHistory_' + new Date().getTime() + '_' + Math.floor((Math.random() * 100) + 1);
             var step = Ext.ComponentQuery.query('#currentStepHidden')[0].value + 1;
             var historyId = 'history_' + new Date().getTime() + '_' + Math.floor((Math.random() * 100) + 1);
@@ -147,7 +251,8 @@ Ext.define('Pressure.view.graph.GraphController', {
             });
 
         }
-    },
+    }
+    ,
     onConfClick: function (btn, e, eOpts) {
         Ext.create('Ext.Window', {
             title: 'Configuration',
@@ -158,7 +263,8 @@ Ext.define('Pressure.view.graph.GraphController', {
                 xtype: 'conf'
             }
         }).center().show();
-    },
+    }
+    ,
     onDataInputClick: function (btn, e, eOpts) {
         Ext.create('Ext.Window', {
             title: 'Data',
@@ -169,8 +275,9 @@ Ext.define('Pressure.view.graph.GraphController', {
                 xtype: 'data'
             }
         }).center().show();
-    },
-    graphAfterrender:  function () {
+    }
+    ,
+    graphAfterrender: function () {
         GRAPH_DATA = {
             "graphset": [
                 {
@@ -196,8 +303,6 @@ Ext.define('Pressure.view.graph.GraphController', {
                     },
                     "scaleY": {
                         "line-color": "#333",
-                        //"values":"0:0.001:0.0001"
-                        //"values":"0.001"
                         "auto-fit": true
                     },
                     "tooltip": {
@@ -256,21 +361,10 @@ Ext.define('Pressure.view.graph.GraphController', {
             data: GRAPH_DATA
         });
     },
-    showResult: function (btn, text) {
-        this.showToast(Ext.String.format('You clicked the {0} button', btn));
-    },
-    showToast: function (s, title) {
-        Ext.toast({
-            html: s,
-            closable: false,
-            align: 't',
-            slideInDuration: 400,
-            minWidth: 400
-        });
-    },
     onConfirm: function (choice) {
         if (choice === 'yes') {
             //
         }
     }
-});
+})
+;

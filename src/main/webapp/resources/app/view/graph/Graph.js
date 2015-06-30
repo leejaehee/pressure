@@ -57,6 +57,18 @@ Ext.define('Pressure.view.graph.Graph', {
             text: 'SAVE',
             handler: 'onSaveClick'
         },
+        '->',
+        {
+            itemId: 'clearButton',
+            xtype: 'button',
+            scale: 'medium',
+            enableToggle: true,
+            style: {
+                //background: 'yellow'
+            },
+            text: 'CLEAR',
+            toggleHandler: 'onClearClick'
+        },
         {
             itemId: 'startButton',
             xtype: 'button',
