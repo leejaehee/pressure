@@ -48,6 +48,11 @@ public class HistoryRepositoryImpl extends PersistentRepositoryImpl<Map, Map> im
 
     @Override
     public boolean updateSetHistory(Map map) {
-        return this.getSqlSessionTemplate().insert(this.getNamespace() + ".updateSetHistory", map) > 0;
+        return this.getSqlSessionTemplate().update(this.getNamespace() + ".updateSetHistory", map) > 0;
+    }
+
+    @Override
+    public boolean updateHistory(Map map) {
+        return this.getSqlSessionTemplate().update(this.getNamespace() + ".updateHistory", map) > 0;
     }
 }

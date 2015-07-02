@@ -33,11 +33,16 @@ Ext.define('Pressure.view.graph.GraphController', {
                 anchor: '100%',
                 buttonText: 'Select File'
             }],
-
-            buttons: [
+            bbarCfg: {
+                buttonAlign: 'center'
+            },
+            bbar: [
+                '->',
                 {
+                    xtype: 'button',
+                    scale: 'medium',
                     text: 'Load',
-                    handler: function () {
+                    handler: function (btn) {
                         var file = Ext.ComponentQuery.query('#loadFilefield')[0].fileInputEl.dom.files[0];
                         var reader = new FileReader();
                         reader.onload = function () {
@@ -72,16 +77,29 @@ Ext.define('Pressure.view.graph.GraphController', {
                                 alert("URL 길이 제한문제");
                             }
                         };
+
                         reader.readAsText(file, 'UTF-8');
-                        popup.close();
+
+                        Ext.toast({
+                            html: 'Success.',
+                            closable: false,
+                            align: 't',
+                            slideInDuration: 200,
+                            minWidth: 400
+                        });
+
+                        this.up('window').close();
                     }
                 },
                 {
-                    text: 'Close',
-                    handler: function () {
-                        popup.close();
+                    xtype: 'button',
+                    scale: 'medium',
+                    text: 'CLOSE',
+                    handler: function (btn) {
+                        this.up('window').close();
                     }
-                }
+                },
+                '->'
             ]
         }).center().show();
     },
@@ -104,11 +122,16 @@ Ext.define('Pressure.view.graph.GraphController', {
                 anchor: '100%',
                 buttonText: 'Select File'
             }],
-
-            buttons: [
+            bbarCfg: {
+                buttonAlign: 'center'
+            },
+            bbar: [
+                '->',
                 {
+                    xtype: 'button',
+                    scale: 'medium',
                     text: 'Save',
-                    handler: function () {
+                    handler: function (btn) {
                         var pom = document.createElement('a');
                         pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + JSON.stringify(GRAPH_DATA));
                         pom.setAttribute('download', Ext.ComponentQuery.query('#saveTextfield')[0].value);
@@ -119,14 +142,27 @@ Ext.define('Pressure.view.graph.GraphController', {
                         pom.click();
 
                         document.body.removeChild(pom);
+
+                        Ext.toast({
+                            html: 'Now saving.',
+                            closable: false,
+                            align: 't',
+                            slideInDuration: 200,
+                            minWidth: 400
+                        });
+
+                        this.up('window').close();
                     }
                 },
                 {
-                    text: 'Close',
-                    handler: function () {
-                        popup.close();
+                    xtype: 'button',
+                    scale: 'medium',
+                    text: 'CLOSE',
+                    handler: function (btn) {
+                        this.up('window').close();
                     }
-                }
+                },
+                '->'
             ]
         }).center().show();
     },
@@ -162,6 +198,10 @@ Ext.define('Pressure.view.graph.GraphController', {
                         "text": "%t pressure : %v , time : %k s)"
                     },
                     "plot": {
+                        "valueBox": {
+                            "type": "all",
+                            "placement": "top"
+                        },
                         "line-width": 3,
                         "marker": {
                             "size": 2
@@ -216,11 +256,14 @@ Ext.define('Pressure.view.graph.GraphController', {
         var gridStore = Ext.ComponentQuery.query('#pressureGrid')[0].getStore();
         gridStore.removeAll();
 
+        Ext.ComponentQuery.query('#currentStepHidden')[0].value = 0;
         Ext.ComponentQuery.query('#poppingPressure')[0].setValue('0');
         Ext.ComponentQuery.query('#browDownpressure')[0].setValue('0');
         Ext.ComponentQuery.query('#leakTestPressure')[0].setValue('0');
         Ext.ComponentQuery.query('#torrentPressure')[0].setValue('0');
-
+        Ext.ComponentQuery.query('#settingPressure')[0].setValue('');
+        Ext.ComponentQuery.query('#testResult')[0].setValue('');
+        Ext.ComponentQuery.query('#testResult')[0].setFieldStyle('background-color: white; color: white; font: normal 20px tahoma, arial, helvetica, sans-serif;');
     },
     onStartClick: function (button, state) {
         if (state) {
@@ -235,6 +278,19 @@ Ext.define('Pressure.view.graph.GraphController', {
                 button.toggle();
                 return false;
             }
+
+            if (!Ext.ComponentQuery.query('#SET_PRESS')[0].getValue()) {
+                Ext.toast({
+                    html: 'Please set Setting Pressure.',
+                    closable: false,
+                    align: 't',
+                    slideInDuration: 200,
+                    minWidth: 400
+                });
+                button.toggle();
+                return false;
+            }
+
             if (!CONF.portConf || !CONF.baudrateConf || !CONF.scanTimeConf) {
                 Ext.toast({
                     html: 'Please set configuration.',
@@ -253,8 +309,9 @@ Ext.define('Pressure.view.graph.GraphController', {
             var PSV_NO = Ext.ComponentQuery.query('#PSV_NO')[0].getValue();
             var testId = 'test_' + new Date().getTime() + '_' + Math.floor((Math.random() * 100) + 1);
 
-            var params = COMMON;
+            ID.historyId = historyId;
 
+            var params = COMMON;
             params.setHistoryId = setHistoryId;
             params.step = step;
             params.historyId = historyId;
@@ -274,60 +331,10 @@ Ext.define('Pressure.view.graph.GraphController', {
                 },
                 params: Ext.encode(params),
                 success: function () {
-                    var websocket = new WebSocket("ws://localhost:8080/websocket/desktop-client");
-
+                    Ext.ComponentQuery.query('#settingPressure')[0].setValue(Ext.ComponentQuery.query('#SET_PRESS')[0].getValue());
                     Ext.ComponentQuery.query('#currentStepHidden')[0].value = Ext.ComponentQuery.query('#currentStepHidden')[0].value + 1;
-
                     var gridStore = Ext.ComponentQuery.query('#pressureGrid')[0].getStore();
                     gridStore.removeAll();
-
-                    websocket.onmessage = function (evnt) {
-                        if (evnt.data != '') {
-                            var splitData = evnt.data.split(',');
-                            var time = splitData[0];
-                            var value = splitData[1];
-
-                            if (step == 1) {
-                                zingchart.exec("pressureUnit", "appendseriesvalues", {
-                                    "values": [
-                                        [eval(value)]
-                                    ]
-                                });
-
-                                gridStore.add({
-                                    accumaltedTime: time,
-                                    pressureValue: value
-                                });
-                            } else {
-                                zingchart.exec("pressureUnit", "appendseriesvalues", {
-                                    "values": [
-                                        [],
-                                        [eval(value)]
-                                    ]
-                                });
-
-                                zingchart.exec("pressureUnit", "removenode", {
-                                    plotindex: 0,
-                                    data: {
-                                        plotindex: 0,
-                                        nodeindex: 0
-                                    }
-                                });
-
-                                gridStore.add({
-                                    accumaltedTime: time,
-                                    pressureValue: value
-                                });
-                                gridStore.remove(gridStore.last());
-                            }
-
-                            GRAPH_DATA = zingchart.exec('pressureUnit', 'getdata');
-                        }
-                    };
-
-                    websocket.onerror = function (evnt) {
-                        alert('ERROR: ' + evnt.data);
-                    };
                 },
                 failure: function () {
                 }
@@ -342,15 +349,12 @@ Ext.define('Pressure.view.graph.GraphController', {
                     'Content-Type': 'application/json; charset=utf-8;'
                 },
                 success: function () {
-                    // result calc
+                    var websocket = new WebSocket("ws://localhost:8080/websocket/desktop-client");
+                    websocket.close();
+
                     var step = Ext.ComponentQuery.query('#currentStepHidden')[0].value;
-                    console.log(step);
-                    console.log(GRAPH_DATA.graphset[0]);
-                    console.log(GRAPH_DATA.graphset[0].series);
-                    console.log(GRAPH_DATA.graphset[0].series[step - 1].values);
                     var seriesArr = GRAPH_DATA.graphset[0].series[step - 1].values;
 
-                    // [0, 0.0001, 0.0001, 0.0001]
                     var prePos = 0;
                     var preVal = -10000;
                     var popVal = 0;
@@ -382,21 +386,46 @@ Ext.define('Pressure.view.graph.GraphController', {
                         preVal = seriesArr[i];
                     }
 
-                    // result setting
                     Ext.ComponentQuery.query('#poppingPressure')[0].setValue(popVal);
                     Ext.ComponentQuery.query('#browDownpressure')[0].setValue(browVal);
                     Ext.ComponentQuery.query('#leakTestPressure')[0].setValue(leakVal);
                     Ext.ComponentQuery.query('#torrentPressure')[0].setValue(leakVal - browVal);
 
-                    if(Ext.ComponentQuery.query('#settingPressure')[0].getValue() == leakVal){
+                    var isSuccess;
+
+                    if (Ext.ComponentQuery.query('#settingPressure')[0].getValue() == leakVal) {
                         var textField = Ext.ComponentQuery.query('#testResult')[0];
                         textField.setValue('SUCCESS');
                         textField.setFieldStyle('background-color: green; color: white; font: normal 20px tahoma, arial, helvetica, sans-serif;')
-                    }else{
+                        isSuccess = 'SUCCESS';
+                    } else {
                         var textField = Ext.ComponentQuery.query('#testResult')[0];
                         textField.setValue('FAIL');
                         textField.setFieldStyle('background-color: red; color: yellow; font: normal 20px tahoma, arial, helvetica, sans-serif;');
+                        isSuccess = 'FAIL';
                     }
+
+                    var params = {};
+                    params.historyId = ID.historyId;
+                    params.poppingPressure = popVal ;
+                    params.browDownpressure = browVal ;
+                    params.leakTestPressure = leakVal ;
+                    params.torrentPressure = (leakVal - browVal)  ;
+                    params.isSuccess = isSuccess;
+
+                    Ext.Ajax.request({
+                        url: '/graph/save/result',
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json; charset=utf-8;'
+                        },
+                        params: Ext.encode(params),
+                        success: function () {
+                        },
+                        failure: function () {
+                        }
+                    });
                 },
                 failure: function () {
                 }
@@ -427,9 +456,37 @@ Ext.define('Pressure.view.graph.GraphController', {
                 xtype: 'data'
             }
         }).center().show();
-    }
-    ,
+    },
     graphAfterrender: function () {
+        var websocket = new WebSocket("ws://localhost:8080/websocket/desktop-client");
+
+        websocket.onmessage = function (evnt) {
+            if (evnt.data != '') {
+                var gridStore = Ext.ComponentQuery.query('#pressureGrid')[0].getStore();
+
+                var splitData = evnt.data.split(',');
+                var time = splitData[0];
+                var value = splitData[1];
+
+                gridStore.add({
+                    accumaltedTime: time,
+                    pressureValue: value
+                });
+
+                var step = Ext.ComponentQuery.query('#currentStepHidden')[0].value;
+                zingchart.exec("pressureUnit", "appendseriesvalues", {
+                    plotindex: step - 1,
+                    values: [eval(value)]
+                });
+
+                GRAPH_DATA = zingchart.exec('pressureUnit', 'getdata');
+            }
+        };
+
+        websocket.onerror = function (evnt) {
+            alert('ERROR: ' + evnt.data);
+        };
+
         GRAPH_DATA = {
             "graphset": [
                 {
@@ -461,6 +518,10 @@ Ext.define('Pressure.view.graph.GraphController', {
                         "text": "%t pressure : %v , time : %k s)"
                     },
                     "plot": {
+                        "valueBox": {
+                            "type": "all",
+                            "placement": "top"
+                        },
                         "line-width": 3,
                         "marker": {
                             "size": 2

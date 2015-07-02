@@ -11,4 +11,6 @@ public interface HistoryService {
     boolean createSetHistory(Map map);
 
     boolean updateSetHistory(Map map);
+
+    boolean updateHistory(Map map);
 }

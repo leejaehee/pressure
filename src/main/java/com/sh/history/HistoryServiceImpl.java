@@ -30,4 +30,9 @@ public class HistoryServiceImpl implements HistoryService {
     public boolean updateSetHistory(Map map) {
         return historyRepository.updateSetHistory(map);
     }
+
+    @Override
+    public boolean updateHistory(Map map) {
+        return historyRepository.updateHistory(map);
+    }
 }

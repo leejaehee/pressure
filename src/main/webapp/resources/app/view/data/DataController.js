@@ -64,7 +64,7 @@ Ext.define('Pressure.view.data.DataController', {
                                         },
                                         success: function (response) {
                                             Ext.toast({
-                                                html: 'Create success.',
+                                                html: 'Success.',
                                                 closable: false,
                                                 align: 't',
                                                 slideInDuration: 400,
@@ -75,7 +75,7 @@ Ext.define('Pressure.view.data.DataController', {
                                         },
                                         failure: function () {
                                             Ext.toast({
-                                                html: 'Create fail.',
+                                                html: 'Cannot create.',
                                                 closable: false,
                                                 align: 't',
                                                 slideInDuration: 400,
@@ -116,7 +116,7 @@ Ext.define('Pressure.view.data.DataController', {
             params: Ext.encode(COMMON),
             success: function () {
                 Ext.toast({
-                    html: 'Save success.',
+                    html: 'Success.',
                     closable: false,
                     align: 't',
                     slideInDuration: 200,
@@ -125,7 +125,7 @@ Ext.define('Pressure.view.data.DataController', {
             },
             failure: function () {
                 Ext.toast({
-                    html: 'Save fail.',
+                    html: 'Cannot save.',
                     closable: false,
                     align: 't',
                     slideInDuration: 200,
@@ -149,7 +149,7 @@ Ext.define('Pressure.view.data.DataController', {
                 Ext.ComponentQuery.query('rightProps #PSV_NO')[0].getStore().reload();
                 COMMON = {};
                 Ext.toast({
-                    html: 'Delete success.',
+                    html: 'Success.',
                     closable: false,
                     align: 't',
                     slideInDuration: 200,
@@ -158,7 +158,7 @@ Ext.define('Pressure.view.data.DataController', {
             },
             failure: function () {
                 Ext.toast({
-                    html: 'Delete fail.',
+                    html: 'Cannot delete.',
                     closable: false,
                     align: 't',
                     slideInDuration: 200,

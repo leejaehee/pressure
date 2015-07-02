@@ -116,6 +116,17 @@
     <!-- 5. Update Statements -->
     <!-- ==================================================================================== -->
 
+    <update id="updateHistory" parameterType="Map">
+        UPDATE HISTORY
+        SET
+        RESULT_POP_PRESS = #{poppingPressure},
+        RESULT_COLD_PRESS = #{browDownpressure},
+        RESULT_LEAK_PRESS = #{leakTestPressure},
+        RESULT_BACK_PRESS = #{torrentPressure},
+        RESULT_OK = #{isSuccess}
+        WHERE HISTORY_ID = #{historyId}
+    </update>
+
     <update id="updateSetHistory" parameterType="Map">
         UPDATE SET_HISTORY
         SET

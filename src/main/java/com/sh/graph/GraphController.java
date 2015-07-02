@@ -89,4 +89,13 @@ public class GraphController {
         response.setSuccess(true);
         return response;
     }
+
+    @RequestMapping("/save/result")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public Response save(@RequestBody Map params) {
+        Response response = new Response();
+        response.setSuccess(historyService.updateHistory(params));
+        return response;
+    }
 }

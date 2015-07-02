@@ -31,4 +31,6 @@ public interface HistoryRepository extends PersistentRepository<Map, Map> {
     boolean createSetHistory(Map map);
 
     boolean updateSetHistory(Map map);
+
+    boolean updateHistory(Map map);
 }

@@ -1,19 +1,20 @@
 package com.sh.graph;
 
-import com.sh.serial.SerialEcho;
 import com.sh.test.TestService;
 import com.sh.websocket.WebSocketClient;
-import com.sh.websocket.WebSocketServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.comm.*;
+import javax.comm.CommPortIdentifier;
+import javax.comm.SerialPort;
+import javax.comm.SerialPortEvent;
+import javax.comm.SerialPortEventListener;
 import javax.websocket.ContainerProvider;
-import javax.websocket.DeploymentException;
 import javax.websocket.Session;
 import javax.websocket.WebSocketContainer;
 import java.io.*;
 import java.net.URI;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -58,7 +59,7 @@ public class PaintGraph extends Thread implements SerialPortEventListener {
             session = container.connectToServer(WebSocketClient.class, URI.create("ws://localhost:8080/websocket/desktop-client"));
             try {
                 portId = CommPortIdentifier.getPortIdentifier(this.port);
-                serialPort = (SerialPort) portId.open("SerialEcho", 2000);
+                serialPort = (SerialPort) portId.open("SerialEcho", 100);
                 serialPort.addEventListener(this);
                 serialPort.notifyOnDataAvailable(true);
                 serialPort.setSerialPortParams(this.baudRate, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
@@ -74,11 +75,26 @@ public class PaintGraph extends Thread implements SerialPortEventListener {
         }
     }
 
+/*
+    @Override
+    public synchronized void start() {
+        super.start();
+        this.connect();
+        try {
+            while (!Thread.currentThread().isInterrupted()) {
+                this.run();
+                Thread.sleep(this.scanTime);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+*/
+
     @Override
     public void run() {
         try {
             this.connect();
-
             while (!Thread.currentThread().isInterrupted()) {
                 bw.write("p000");
                 bw.newLine();
@@ -93,18 +109,18 @@ public class PaintGraph extends Thread implements SerialPortEventListener {
     public void serialEvent(SerialPortEvent event) {
         switch (event.getEventType()) {
             case SerialPortEvent.OUTPUT_BUFFER_EMPTY:
-                break;             // Output buffer is empty
+                break;
             case SerialPortEvent.DATA_AVAILABLE:
                 try {
-                    echoMsg = br.readLine();
+                    echoMsg = br.readLine(); // +0.0000 1 Z
                     String[] split = echoMsg.split(" ");
                     if (echoMsg != null && split.length > 0) {
-                        Map map = new HashMap();
                         long currentTimeMillis = System.currentTimeMillis();
+                        Map map = new HashMap();
                         map.put("testId", this.testId);
                         map.put("testTime", currentTimeMillis);
                         map.put("testValue", split[0]);
-                        testService.createTest(map);
+//                        testService.createTest(map);
                         this.session.getBasicRemote().sendText(currentTimeMillis + "," + split[0]);
                     }
                     bw.write(echoMsg, 0, echoMsg.length());

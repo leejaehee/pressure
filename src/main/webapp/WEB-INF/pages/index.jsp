@@ -12,6 +12,7 @@
         var COMMON = {};
         var CONF = {};
         var GRAPH_DATA = {};
+        var ID = {};
 
         CONF.portConf = 'COM3';
         CONF.baudrateConf = '19200';

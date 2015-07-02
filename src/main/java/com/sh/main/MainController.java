@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class MainController {
 
     @RequestMapping("/")
-    public String printWelcome(ModelMap model) {
+    public String entry(ModelMap model) {
         return "index";
     }
 

@@ -106,33 +106,12 @@ Ext.define('Pressure.view.conf.Conf', {
                             margin: '0 0 5 0',
                             items: [
                                 {
-                                    xtype: 'textfield',
-                                    itemId: 'setPressureConf',
-                                    fieldLabel: 'Set pressure',
-                                    name: 'setPressureConf'
-                                },
-                                {
-                                    xtype: 'label',
-                                    itemId: 'setPressureConfLabel',
-                                    text: 'MPa'
-                                }
-                            ]
-                        },
-                        {
-                            xtype: 'panel',
-                            layout: {
-                                type: 'hbox',
-                                align: 'middle'
-                            },
-                            margin: '0 0 5 0',
-                            items: [
-                                {
-                                    xtype: 'textfield',
+                                    xtype: 'numberfield',
                                     itemId: 'scanTimeConf',
                                     fieldLabel: 'Scan time',
                                     name: 'scanTimeConf',
                                     allowBlank: false,
-                                    value: 1000
+                                    value: CONF.scanTimeConf
                                 },
                                 {
                                     xtype: 'label',
@@ -174,23 +153,28 @@ Ext.define('Pressure.view.conf.Conf', {
             scale: 'medium',
             text: 'SETTING',
             handler: function (btn) {
-                Ext.ComponentQuery.query('#settingPressure')[0].setValue(Ext.ComponentQuery.query('#setPressureConf')[0].getValue());
-
                 Ext.ComponentQuery.query('#scanTimeRigthProps')[0].setValue(Ext.ComponentQuery.query('#scanTimeConf')[0].getValue());
 
                 Ext.ComponentQuery.query('#poppingPressureLabel')[0].setText(Ext.ComponentQuery.query('#pressureUnitConf')[0].getValue());
                 Ext.ComponentQuery.query('#browDownpressureLabel')[0].setText(Ext.ComponentQuery.query('#pressureUnitConf')[0].getValue());
                 Ext.ComponentQuery.query('#leakTestPressureLabel')[0].setText(Ext.ComponentQuery.query('#pressureUnitConf')[0].getValue());
                 Ext.ComponentQuery.query('#torrentPressureLabel')[0].setText(Ext.ComponentQuery.query('#pressureUnitConf')[0].getValue());
-                Ext.ComponentQuery.query('#settingPressureLabel')[0].setText(Ext.ComponentQuery.query('#pressureUnitConf')[0].getValue());
-                Ext.ComponentQuery.query('#setPressureConfLabel')[0].setText(Ext.ComponentQuery.query('#pressureUnitConf')[0].getValue());
 
 
                 CONF.portConf = Ext.ComponentQuery.query('#portConf')[0].getValue();
                 CONF.baudrateConf = Ext.ComponentQuery.query('#baudrateConf')[0].getValue();
                 CONF.scanTimeConf = Ext.ComponentQuery.query('#scanTimeConf')[0].getValue();
                 CONF.pressureUnitConf = Ext.ComponentQuery.query('#pressureUnitConf')[0].getValue();
-                CONF.setPressureConf = Ext.ComponentQuery.query('#setPressureConf')[0].getValue();
+
+                Ext.toast({
+                    html: 'Success.',
+                    closable: false,
+                    align: 't',
+                    slideInDuration: 200,
+                    minWidth: 400
+                });
+
+                this.up('window').close();
             }
         },
         {
@@ -198,7 +182,7 @@ Ext.define('Pressure.view.conf.Conf', {
             scale: 'medium',
             text: 'CLOSE',
             handler: function (btn) {
-                btn.up('window').hide();
+                this.up('window').close();
             }
         },
         '->'
