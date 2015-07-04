@@ -14,7 +14,6 @@
         var GRAPH_DATA = {};
         var ID = {};
 
-        CONF.portConf = 'COM3';
         CONF.baudrateConf = '19200';
         CONF.scanTimeConf = '1000';
         CONF.pressureUnitConf = 'MPa';

@@ -63,12 +63,12 @@ Ext.define('Pressure.view.conf.Conf', {
                             valueField: 'portConf',
                             editable: false,
                             name: 'portConf',
-                            itemId: 'portConf',
+                            itemId: 'portConf'/*,
                             listeners: {
                                 afterrender: function (combo, eOpts) {
                                     this.value="COM3";
                                 }
-                            }
+                            }*/
                         },
                         {
                             xtype: 'combo',

@@ -110,12 +110,12 @@ public class PaintGraph extends Thread implements SerialPortEventListener {
                 break;
         }
     }
-//{"abbr":"AL", "name":"Alabama"},
+
     public List portList(){
         List list = new ArrayList();
-        Map map = new HashMap();
         Enumeration portIdentifiers = CommPortIdentifier.getPortIdentifiers();
         while(portIdentifiers.hasMoreElements()){
+            Map map = new HashMap();
             map.put("portConf", ((CommPortIdentifier) portIdentifiers.nextElement()).getName());
             list.add(map);
         }
