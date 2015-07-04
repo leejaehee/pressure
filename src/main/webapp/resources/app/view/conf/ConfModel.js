@@ -15,6 +15,15 @@ Ext.define('Pressure.view.conf.ConfModel', {
             fields: [
                 'portConf'
             ],
+            autoLoad: true,
+            proxy: {
+                type: 'ajax',
+                url: '/graph/port/list.json',
+                reader: {
+                    type: 'json',
+                    root: 'list'
+                }
+            }/*,
             data: [
                 {
                     portConf: 'COM1'
@@ -76,7 +85,7 @@ Ext.define('Pressure.view.conf.ConfModel', {
                 {
                     portConf: 'COM20'
                 }
-            ]
+            ]*/
         },
         baudrateComboStore: {
             fields: [
@@ -146,6 +155,9 @@ Ext.define('Pressure.view.conf.ConfModel', {
                 },
                 {
                     pressureUnitConf: 'psi'
+                },
+                {
+                    pressureUnitConf: 'Kg/cm2'
                 }
             ]
         }

@@ -322,6 +322,15 @@ Ext.define('Pressure.view.graph.GraphController', {
             params.pressureUnitConf = CONF.pressureUnitConf;
             params.testId = testId;
 
+            GRAPH_DATA.graphset[0].scaleY.values = "0:"+ Ext.ComponentQuery.query('#SET_PRESS')[0].getValue()*2;
+
+            zingchart.render({
+                id: 'pressureUnit',
+                width: window.innerWidth - 317 || document.body.clientWidth - 317,
+                height: window.innerHeight - 45 || document.body.clientHeight - 45,
+                data: GRAPH_DATA
+            });
+
             Ext.Ajax.request({
                 url: '/graph/start',
                 method: 'POST',
@@ -393,7 +402,7 @@ Ext.define('Pressure.view.graph.GraphController', {
 
                     var isSuccess;
 
-                    if (Ext.ComponentQuery.query('#settingPressure')[0].getValue() == leakVal) {
+                    if (popVal*0.9 < leakVal ) {
                         var textField = Ext.ComponentQuery.query('#testResult')[0];
                         textField.setValue('SUCCESS');
                         textField.setFieldStyle('background-color: green; color: white; font: normal 20px tahoma, arial, helvetica, sans-serif;')
@@ -476,7 +485,7 @@ Ext.define('Pressure.view.graph.GraphController', {
                 var step = Ext.ComponentQuery.query('#currentStepHidden')[0].value;
                 zingchart.exec("pressureUnit", "appendseriesvalues", {
                     plotindex: step - 1,
-                    values: [eval(value)]
+                    values: [parseFloat(value)]
                 });
 
                 GRAPH_DATA = zingchart.exec('pressureUnit', 'getdata');

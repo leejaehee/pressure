@@ -4,6 +4,7 @@ import com.sh.test.TestService;
 import com.sh.websocket.WebSocketClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import javax.comm.CommPortIdentifier;
 import javax.comm.SerialPort;
@@ -15,9 +16,7 @@ import javax.websocket.WebSocketContainer;
 import java.io.*;
 import java.net.URI;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class PaintGraph extends Thread implements SerialPortEventListener {
@@ -57,7 +56,6 @@ public class PaintGraph extends Thread implements SerialPortEventListener {
         try {
             WebSocketContainer container = ContainerProvider.getWebSocketContainer();
             session = container.connectToServer(WebSocketClient.class, URI.create("ws://localhost:8080/websocket/desktop-client"));
-            try {
                 portId = CommPortIdentifier.getPortIdentifier(this.port);
                 serialPort = (SerialPort) portId.open("SerialEcho", 100);
                 serialPort.addEventListener(this);
@@ -67,29 +65,10 @@ public class PaintGraph extends Thread implements SerialPortEventListener {
                 serialPort.setDTR(true);
                 br = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
                 bw = new BufferedWriter(new OutputStreamWriter(serialPort.getOutputStream()));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         } catch (Exception e) {
-            e.printStackTrace();
+            this.start();
         }
     }
-
-/*
-    @Override
-    public synchronized void start() {
-        super.start();
-        this.connect();
-        try {
-            while (!Thread.currentThread().isInterrupted()) {
-                this.run();
-                Thread.sleep(this.scanTime);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-*/
 
     @Override
     public void run() {
@@ -102,7 +81,7 @@ public class PaintGraph extends Thread implements SerialPortEventListener {
                 Thread.sleep(this.scanTime);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            this.start();
         }
     }
 
@@ -130,5 +109,16 @@ public class PaintGraph extends Thread implements SerialPortEventListener {
                 }
                 break;
         }
+    }
+//{"abbr":"AL", "name":"Alabama"},
+    public List portList(){
+        List list = new ArrayList();
+        Map map = new HashMap();
+        Enumeration portIdentifiers = CommPortIdentifier.getPortIdentifiers();
+        while(portIdentifiers.hasMoreElements()){
+            map.put("portConf", ((CommPortIdentifier) portIdentifiers.nextElement()).getName());
+            list.add(map);
+        }
+        return list;
     }
 }

@@ -19,12 +19,6 @@ package com.sh.repository;
 
 public abstract class PersistentRepositoryImpl<D, P> extends DefaultSqlSessionDaoSupport implements PersistentRepository<D, P> {
 
-    /**
-     * MyBatis의 SQL Query를 실행하기 위한 SQLMap의 네임스페이스를 반환한다.
-     * 일반적으로 이것의 이름은 Repository의 fully qualifed name을 사용한다.
-     *
-     * @return SQLMap의 네임스페이스
-     */
     public abstract String getNamespace();
 
     @Override

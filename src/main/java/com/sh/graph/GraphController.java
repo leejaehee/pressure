@@ -66,9 +66,14 @@ public class GraphController {
         paintGraph.setPort(params.get("portConf").toString());
         paintGraph.setBaudRate(Integer.parseInt(params.get("baudrateConf").toString()));
         paintGraph.setScanTime(Integer.parseInt(params.get("scanTimeConf").toString()));
-
+        System.out.println(paintGraph.getState().name());
         if ("TIMED_WAITING".equals(paintGraph.getState().name())) {
             paintGraph.resume();
+//        } else if("TERMINATED".equals(paintGraph.getState().name())) {
+//            paintGraph.start();
+//        } else if("RUNNABLE".equals(paintGraph.getState().name())) {
+//            paintGraph.suspend();
+//            paintGraph.resume();
         } else {
             paintGraph.start();
         }
@@ -96,6 +101,16 @@ public class GraphController {
     public Response save(@RequestBody Map params) {
         Response response = new Response();
         response.setSuccess(historyService.updateHistory(params));
+        return response;
+    }
+
+    @RequestMapping("/port/list")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public Response list() {
+        Response response = new Response();
+        response.getList().addAll(paintGraph.portList());
+        response.setSuccess(true);
         return response;
     }
 }

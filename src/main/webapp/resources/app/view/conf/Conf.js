@@ -159,7 +159,7 @@ Ext.define('Pressure.view.conf.Conf', {
                 Ext.ComponentQuery.query('#browDownpressureLabel')[0].setText(Ext.ComponentQuery.query('#pressureUnitConf')[0].getValue());
                 Ext.ComponentQuery.query('#leakTestPressureLabel')[0].setText(Ext.ComponentQuery.query('#pressureUnitConf')[0].getValue());
                 Ext.ComponentQuery.query('#torrentPressureLabel')[0].setText(Ext.ComponentQuery.query('#pressureUnitConf')[0].getValue());
-
+                Ext.ComponentQuery.query('#settingPressureLabel')[0].setText(Ext.ComponentQuery.query('#pressureUnitConf')[0].getValue());
 
                 CONF.portConf = Ext.ComponentQuery.query('#portConf')[0].getValue();
                 CONF.baudrateConf = Ext.ComponentQuery.query('#baudrateConf')[0].getValue();
