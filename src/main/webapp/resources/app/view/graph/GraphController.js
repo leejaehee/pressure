@@ -15,6 +15,11 @@ Ext.define('Pressure.view.graph.GraphController', {
     alias: 'controller.graph',
 
     onOpenClick: function () {
+        if (Ext.ComponentQuery.query("#currentStatusHidden")[0].getValue() == 1) {
+            this.onToast('Please stop.');
+            return false;
+        }
+
         var popup = Ext.create('Ext.Window', {
             title: 'Load graph',
             layout: 'fit',
@@ -102,6 +107,11 @@ Ext.define('Pressure.view.graph.GraphController', {
         }).center().show();
     },
     onSaveClick: function () {
+        if (Ext.ComponentQuery.query("#currentStatusHidden")[0].getValue() == 1) {
+            this.onToast('Please stop.');
+            return false;
+        }
+
         var popup = Ext.create('Ext.Window', {
             title: 'Save graph',
             layout: 'fit',
@@ -161,6 +171,11 @@ Ext.define('Pressure.view.graph.GraphController', {
         }).center().show();
     },
     onClearClick: function () {
+        if (Ext.ComponentQuery.query("#currentStatusHidden")[0].getValue() == 1) {
+            this.onToast('Please stop.');
+            return false;
+        }
+
         GRAPH_DATA = {
             "graphset": [
                 {
@@ -260,6 +275,11 @@ Ext.define('Pressure.view.graph.GraphController', {
         Ext.ComponentQuery.query('#testResult')[0].setFieldStyle('background-color: white; color: white; font: normal 20px tahoma, arial, helvetica, sans-serif;');
     },
     onStartClick: function () {
+        if (Ext.ComponentQuery.query("#currentStatusHidden")[0].getValue() == 1) {
+            this.onToast('Please stop.');
+            return false;
+        }
+
         if (!Ext.ComponentQuery.query('#PSV_NO')[0].getValue()) {
             this.onToast('Please select a PSVNO.');
             return false;
@@ -314,6 +334,7 @@ Ext.define('Pressure.view.graph.GraphController', {
             success: function () {
                 Ext.ComponentQuery.query('#settingPressure')[0].setValue(Ext.ComponentQuery.query('#SET_PRESS')[0].getValue());
                 Ext.ComponentQuery.query('#currentStepHidden')[0].value = Ext.ComponentQuery.query('#currentStepHidden')[0].value + 1;
+                Ext.ComponentQuery.query("#currentStatusHidden")[0].setValue(1);
                 var gridStore = Ext.ComponentQuery.query('#pressureGrid')[0].getStore();
                 gridStore.removeAll();
             },
@@ -403,6 +424,7 @@ Ext.define('Pressure.view.graph.GraphController', {
                     },
                     params: Ext.encode(params),
                     success: function () {
+                        Ext.ComponentQuery.query("#currentStatusHidden")[0].setValue(0);
                     },
                     failure: function () {
                     }
@@ -413,6 +435,11 @@ Ext.define('Pressure.view.graph.GraphController', {
         });
     },
     onConfClick: function (btn, e, eOpts) {
+        if (Ext.ComponentQuery.query("#currentStatusHidden")[0].getValue() == 1) {
+            this.onToast('Please stop.');
+            return false;
+        }
+
         Ext.create('Ext.Window', {
             title: 'Configuration',
             layout: 'fit',
@@ -424,6 +451,11 @@ Ext.define('Pressure.view.graph.GraphController', {
         }).center().show();
     },
     onDataInputClick: function (btn, e, eOpts) {
+        if (Ext.ComponentQuery.query("#currentStatusHidden")[0].getValue() == 1) {
+            this.onToast('Please stop.');
+            return false;
+        }
+
         Ext.create('Ext.Window', {
             title: 'Data',
             layout: 'fit',
