@@ -26,7 +26,7 @@ public interface SheetRepository extends PersistentRepository<Map, Map> {
 
     public static final String NAMESPACE = SheetRepository.class.getName();
 
-    Map selectByPSVNo(String PSVNo);
+    Map<String, Object> selectByPSVNo(String PSVNo);
 
     boolean deleteByPSVNo(String PSVNo);
 

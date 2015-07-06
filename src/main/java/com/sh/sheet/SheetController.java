@@ -21,7 +21,7 @@ public class SheetController {
     @ResponseBody
     public Response get(@RequestParam String PSV_NO) {
         Response response = new Response();
-        Map sheet = sheetService.selectByPSVNo(PSV_NO);
+        Map<String, Object> sheet = sheetService.selectByPSVNo(PSV_NO);
         response.setSuccess(true);
         response.getMap().putAll(sheet);
         return response;
@@ -64,8 +64,7 @@ public class SheetController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public boolean create(@RequestParam String PSV_NO) {
-        boolean created = sheetService.createSheet(PSV_NO);
-        return created;
+        return sheetService.createSheet(PSV_NO);
     }
 
 }

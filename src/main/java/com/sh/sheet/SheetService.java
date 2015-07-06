@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface SheetService {
-    public Map selectByPSVNo(String PSVNo);
+    public Map<String, Object> selectByPSVNo(String PSVNo);
 
     boolean deleteByPSVNo(String PSVNo);
 

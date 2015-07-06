@@ -39,6 +39,13 @@ Ext.define('Pressure.view.graph.Graph', {
             id: 'currentStepHidden',
             value: 0,
             hidden: true
+        },
+        {
+            xtype: 'label',
+            itemId: 'currentStatusHidden',
+            id: 'currentStatusHidden',
+            value: 0,
+            hidden: true
         }
     ],
 
@@ -72,12 +79,15 @@ Ext.define('Pressure.view.graph.Graph', {
             itemId: 'startButton',
             xtype: 'button',
             scale: 'medium',
-            enableToggle: true,
-            style: {
-                //background: 'yellow'
-            },
             text: 'START',
-            toggleHandler: 'onStartClick'
+            handler: 'onStartClick'
+        },
+        {
+            itemId: 'stopButton',
+            xtype: 'button',
+            scale: 'medium',
+            text: 'STOP',
+            handler: 'onStopClick'
         },
         '->',
         {

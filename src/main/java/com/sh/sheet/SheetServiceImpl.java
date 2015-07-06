@@ -15,7 +15,7 @@ public class SheetServiceImpl implements SheetService {
     SheetRepository sheetRepository;
 
     @Override
-    public Map selectByPSVNo(String PSVNo) {
+    public Map<String, Object> selectByPSVNo(String PSVNo) {
         return sheetRepository.selectByPSVNo(PSVNo);
     }
 

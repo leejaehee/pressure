@@ -22,17 +22,19 @@ Ext.define('Pressure.view.graph.GraphController', {
             bodyPadding: 10,
             frame: true,
             renderTo: Ext.getBody(),
-            items: [{
-                xtype: 'filefield',
-                itemId: 'loadFilefield',
-                name: 'loadFile',
-                fieldLabel: 'File',
-                labelWidth: 50,
-                msgTarget: 'side',
-                allowBlank: false,
-                anchor: '100%',
-                buttonText: 'Select File'
-            }],
+            items: [
+                {
+                    xtype: 'filefield',
+                    itemId: 'loadFilefield',
+                    name: 'loadFile',
+                    fieldLabel: 'File',
+                    labelWidth: 50,
+                    msgTarget: 'side',
+                    allowBlank: false,
+                    anchor: '100%',
+                    buttonText: 'Select File'
+                }
+            ],
             bbarCfg: {
                 buttonAlign: 'center'
             },
@@ -80,13 +82,9 @@ Ext.define('Pressure.view.graph.GraphController', {
 
                         reader.readAsText(file, 'UTF-8');
 
-                        Ext.toast({
-                            html: 'Success.',
-                            closable: false,
-                            align: 't',
-                            slideInDuration: 200,
-                            minWidth: 400
-                        });
+                        this.onToast('Success.');
+
+                        Ext.ComponentQuery.query('#currentStepHidden')[0].value = 1;
 
                         this.up('window').close();
                     }
@@ -111,17 +109,19 @@ Ext.define('Pressure.view.graph.GraphController', {
             bodyPadding: 10,
             frame: true,
             renderTo: Ext.getBody(),
-            items: [{
-                xtype: 'textfield',
-                itemId: 'saveTextfield',
-                name: 'saveFile',
-                fieldLabel: 'Filename',
-                labelWidth: 100,
-                msgTarget: 'side',
-                allowBlank: false,
-                anchor: '100%',
-                buttonText: 'Select File'
-            }],
+            items: [
+                {
+                    xtype: 'textfield',
+                    itemId: 'saveTextfield',
+                    name: 'saveFile',
+                    fieldLabel: 'Filename',
+                    labelWidth: 100,
+                    msgTarget: 'side',
+                    allowBlank: false,
+                    anchor: '100%',
+                    buttonText: 'Select File'
+                }
+            ],
             bbarCfg: {
                 buttonAlign: 'center'
             },
@@ -143,13 +143,7 @@ Ext.define('Pressure.view.graph.GraphController', {
 
                         document.body.removeChild(pom);
 
-                        Ext.toast({
-                            html: 'Now saving.',
-                            closable: false,
-                            align: 't',
-                            slideInDuration: 200,
-                            minWidth: 400
-                        });
+                        this.onToast('Now saving.');
 
                         this.up('window').close();
                     }
@@ -265,184 +259,159 @@ Ext.define('Pressure.view.graph.GraphController', {
         Ext.ComponentQuery.query('#testResult')[0].setValue('');
         Ext.ComponentQuery.query('#testResult')[0].setFieldStyle('background-color: white; color: white; font: normal 20px tahoma, arial, helvetica, sans-serif;');
     },
-    onStartClick: function (button, state) {
-        if (state) {
-            if (!Ext.ComponentQuery.query('#PSV_NO')[0].getValue()) {
-                Ext.toast({
-                    html: 'Please select a PSVNO.',
-                    closable: false,
-                    align: 't',
-                    slideInDuration: 200,
-                    minWidth: 400
-                });
-                button.toggle();
-                return false;
-            }
-
-            if (!Ext.ComponentQuery.query('#SET_PRESS')[0].getValue()) {
-                Ext.toast({
-                    html: 'Please set Setting Pressure.',
-                    closable: false,
-                    align: 't',
-                    slideInDuration: 200,
-                    minWidth: 400
-                });
-                button.toggle();
-                return false;
-            }
-
-            if (!CONF.portConf || !CONF.baudrateConf || !CONF.scanTimeConf) {
-                Ext.toast({
-                    html: 'Please set configuration.',
-                    closable: false,
-                    align: 't',
-                    slideInDuration: 200,
-                    minWidth: 400
-                });
-                button.toggle();
-                return false;
-            }
-
-            var setHistoryId = 'setHistory_' + new Date().getTime() + '_' + Math.floor((Math.random() * 100) + 1);
-            var step = Ext.ComponentQuery.query('#currentStepHidden')[0].value + 1;
-            var historyId = 'history_' + new Date().getTime() + '_' + Math.floor((Math.random() * 100) + 1);
-            var PSV_NO = Ext.ComponentQuery.query('#PSV_NO')[0].getValue();
-            var testId = 'test_' + new Date().getTime() + '_' + Math.floor((Math.random() * 100) + 1);
-
-            ID.historyId = historyId;
-
-            var params = COMMON;
-            params.setHistoryId = setHistoryId;
-            params.step = step;
-            params.historyId = historyId;
-            params.portConf = CONF.portConf;
-            params.baudrateConf = CONF.baudrateConf;
-            params.setPressureConf = CONF.setPressureConf;
-            params.scanTimeConf = CONF.scanTimeConf;
-            params.pressureUnitConf = CONF.pressureUnitConf;
-            params.testId = testId;
-
-            GRAPH_DATA.graphset[0].scaleY.values = "0:"+ Ext.ComponentQuery.query('#SET_PRESS')[0].getValue()*2;
-
-            zingchart.render({
-                id: 'pressureUnit',
-                width: window.innerWidth - 317 || document.body.clientWidth - 317,
-                height: window.innerHeight - 45 || document.body.clientHeight - 45,
-                data: GRAPH_DATA
-            });
-
-            Ext.Ajax.request({
-                url: '/graph/start',
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json; charset=utf-8;'
-                },
-                params: Ext.encode(params),
-                success: function () {
-                    Ext.ComponentQuery.query('#settingPressure')[0].setValue(Ext.ComponentQuery.query('#SET_PRESS')[0].getValue());
-                    Ext.ComponentQuery.query('#currentStepHidden')[0].value = Ext.ComponentQuery.query('#currentStepHidden')[0].value + 1;
-                    var gridStore = Ext.ComponentQuery.query('#pressureGrid')[0].getStore();
-                    gridStore.removeAll();
-                },
-                failure: function () {
-                }
-            });
-
-        } else {
-            Ext.Ajax.request({
-                url: '/graph/stop',
-                method: 'GET',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json; charset=utf-8;'
-                },
-                success: function () {
-                    var websocket = new WebSocket("ws://localhost:8080/websocket/desktop-client");
-                    websocket.close();
-
-                    var step = Ext.ComponentQuery.query('#currentStepHidden')[0].value;
-                    var seriesArr = GRAPH_DATA.graphset[0].series[step - 1].values;
-
-                    var prePos = 0;
-                    var preVal = -10000;
-                    var popVal = 0;
-                    var browVal = 0;
-                    var leakVal = 0;
-
-                    for (var i = 1; i < seriesArr.length; i++) {
-                        if (preVal > seriesArr[i]) {
-                            popVal = preVal;
-                            prePos = i - 1;
-                            break;
-                        }
-                        preVal = seriesArr[i];
-                    }
-
-                    for (var i = prePos; i < seriesArr.length; i++) {
-                        if (preVal < seriesArr[i]) {
-                            browVal = preVal;
-                            prePos = i - 1;
-                            break;
-                        }
-                        preVal = seriesArr[i];
-                    }
-
-                    for (var i = prePos; i < seriesArr.length; i++) {
-                        if (preVal < seriesArr[i]) {
-                            leakVal = seriesArr[i];
-                        }
-                        preVal = seriesArr[i];
-                    }
-
-                    Ext.ComponentQuery.query('#poppingPressure')[0].setValue(popVal);
-                    Ext.ComponentQuery.query('#browDownpressure')[0].setValue(browVal);
-                    Ext.ComponentQuery.query('#leakTestPressure')[0].setValue(leakVal);
-                    Ext.ComponentQuery.query('#torrentPressure')[0].setValue(leakVal - browVal);
-
-                    var isSuccess;
-
-                    if (popVal*0.9 < leakVal ) {
-                        var textField = Ext.ComponentQuery.query('#testResult')[0];
-                        textField.setValue('SUCCESS');
-                        textField.setFieldStyle('background-color: green; color: white; font: normal 20px tahoma, arial, helvetica, sans-serif;')
-                        isSuccess = 'SUCCESS';
-                    } else {
-                        var textField = Ext.ComponentQuery.query('#testResult')[0];
-                        textField.setValue('FAIL');
-                        textField.setFieldStyle('background-color: red; color: yellow; font: normal 20px tahoma, arial, helvetica, sans-serif;');
-                        isSuccess = 'FAIL';
-                    }
-
-                    var params = {};
-                    params.historyId = ID.historyId;
-                    params.poppingPressure = popVal ;
-                    params.browDownpressure = browVal ;
-                    params.leakTestPressure = leakVal ;
-                    params.torrentPressure = (leakVal - browVal)  ;
-                    params.isSuccess = isSuccess;
-
-                    Ext.Ajax.request({
-                        url: '/graph/save/result',
-                        method: 'POST',
-                        headers: {
-                            'Accept': 'application/json',
-                            'Content-Type': 'application/json; charset=utf-8;'
-                        },
-                        params: Ext.encode(params),
-                        success: function () {
-                        },
-                        failure: function () {
-                        }
-                    });
-                },
-                failure: function () {
-                }
-            });
-
+    onStartClick: function () {
+        if (!Ext.ComponentQuery.query('#PSV_NO')[0].getValue()) {
+            this.onToast('Please select a PSVNO.');
+            return false;
         }
-    }
-    ,
+
+        if (!Ext.ComponentQuery.query('#SET_PRESS')[0].getValue()) {
+            this.onToast('Please set Setting Pressure.');
+            return false;
+        }
+
+        if (!CONF.portConf || !CONF.baudrateConf || !CONF.scanTimeConf) {
+            this.onToast('Please set configuration.');
+            return false;
+        }
+
+        var setHistoryId = 'setHistory_' + new Date().getTime() + '_' + Math.floor((Math.random() * 100) + 1);
+        var step = Ext.ComponentQuery.query('#currentStepHidden')[0].value + 1;
+        var historyId = 'history_' + new Date().getTime() + '_' + Math.floor((Math.random() * 100) + 1);
+        var PSV_NO = Ext.ComponentQuery.query('#PSV_NO')[0].getValue();
+        var testId = 'test_' + new Date().getTime() + '_' + Math.floor((Math.random() * 100) + 1);
+
+        ID.historyId = historyId;
+
+        var params = COMMON;
+        params.setHistoryId = setHistoryId;
+        params.step = step;
+        params.historyId = historyId;
+        params.portConf = CONF.portConf;
+        params.baudrateConf = CONF.baudrateConf;
+        params.setPressureConf = CONF.setPressureConf;
+        params.scanTimeConf = CONF.scanTimeConf;
+        params.pressureUnitConf = CONF.pressureUnitConf;
+        params.testId = testId;
+
+        GRAPH_DATA.graphset[0].scaleY.values = "0:" + Ext.ComponentQuery.query('#SET_PRESS')[0].getValue() * 2;
+
+        zingchart.render({
+            id: 'pressureUnit',
+            width: window.innerWidth - 317 || document.body.clientWidth - 317,
+            height: window.innerHeight - 45 || document.body.clientHeight - 45,
+            data: GRAPH_DATA
+        });
+
+        Ext.Ajax.request({
+            url: '/graph/start',
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json; charset=utf-8;'
+            },
+            params: Ext.encode(params),
+            success: function () {
+                Ext.ComponentQuery.query('#settingPressure')[0].setValue(Ext.ComponentQuery.query('#SET_PRESS')[0].getValue());
+                Ext.ComponentQuery.query('#currentStepHidden')[0].value = Ext.ComponentQuery.query('#currentStepHidden')[0].value + 1;
+                var gridStore = Ext.ComponentQuery.query('#pressureGrid')[0].getStore();
+                gridStore.removeAll();
+            },
+            failure: function () {
+            }
+        });
+    },
+    onStopClick: function () {
+        Ext.Ajax.request({
+            url: '/graph/stop',
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json; charset=utf-8;'
+            },
+            success: function () {
+                var websocket = new WebSocket("ws://localhost:8080/websocket/desktop-client");
+                websocket.close();
+
+                var step = Ext.ComponentQuery.query('#currentStepHidden')[0].value;
+                var seriesArr = GRAPH_DATA.graphset[0].series[step - 1].values;
+
+                var prePos = 0;
+                var preVal = -10000;
+                var popVal = 0;
+                var browVal = 0;
+                var leakVal = 0;
+
+                for (var i = 1; i < seriesArr.length; i++) {
+                    if (preVal > seriesArr[i]) {
+                        popVal = preVal;
+                        prePos = i - 1;
+                        break;
+                    }
+                    preVal = seriesArr[i];
+                }
+
+                for (var i = prePos; i < seriesArr.length; i++) {
+                    if (preVal < seriesArr[i]) {
+                        browVal = preVal;
+                        prePos = i - 1;
+                        break;
+                    }
+                    preVal = seriesArr[i];
+                }
+
+                for (var i = prePos; i < seriesArr.length; i++) {
+                    if (preVal < seriesArr[i]) {
+                        leakVal = seriesArr[i];
+                    }
+                    preVal = seriesArr[i];
+                }
+
+                Ext.ComponentQuery.query('#poppingPressure')[0].setValue(popVal);
+                Ext.ComponentQuery.query('#browDownpressure')[0].setValue(browVal);
+                Ext.ComponentQuery.query('#leakTestPressure')[0].setValue(leakVal);
+                Ext.ComponentQuery.query('#torrentPressure')[0].setValue(leakVal - browVal);
+
+                var isSuccess;
+
+                if (popVal * 0.9 < leakVal) {
+                    var textField = Ext.ComponentQuery.query('#testResult')[0];
+                    textField.setValue('SUCCESS');
+                    textField.setFieldStyle('background-color: green; color: white; font: normal 20px tahoma, arial, helvetica, sans-serif;')
+                    isSuccess = 'SUCCESS';
+                } else {
+                    var textField = Ext.ComponentQuery.query('#testResult')[0];
+                    textField.setValue('FAIL');
+                    textField.setFieldStyle('background-color: red; color: yellow; font: normal 20px tahoma, arial, helvetica, sans-serif;');
+                    isSuccess = 'FAIL';
+                }
+
+                var params = {};
+                params.historyId = ID.historyId;
+                params.poppingPressure = popVal;
+                params.browDownpressure = browVal;
+                params.leakTestPressure = leakVal;
+                params.torrentPressure = (leakVal - browVal);
+                params.isSuccess = isSuccess;
+
+                Ext.Ajax.request({
+                    url: '/graph/save/result',
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json; charset=utf-8;'
+                    },
+                    params: Ext.encode(params),
+                    success: function () {
+                    },
+                    failure: function () {
+                    }
+                });
+            },
+            failure: function () {
+            }
+        });
+    },
     onConfClick: function (btn, e, eOpts) {
         Ext.create('Ext.Window', {
             title: 'Configuration',
@@ -453,8 +422,7 @@ Ext.define('Pressure.view.graph.GraphController', {
                 xtype: 'conf'
             }
         }).center().show();
-    }
-    ,
+    },
     onDataInputClick: function (btn, e, eOpts) {
         Ext.create('Ext.Window', {
             title: 'Data',
@@ -587,6 +555,14 @@ Ext.define('Pressure.view.graph.GraphController', {
         if (choice === 'yes') {
             //
         }
+    },
+    onToast: function (text) {
+        Ext.toast({
+            html: text,
+            closable: false,
+            align: 't',
+            slideInDuration: 200,
+            minWidth: 400
+        });
     }
-})
-;
+});

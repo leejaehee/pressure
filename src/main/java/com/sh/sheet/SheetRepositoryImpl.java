@@ -39,7 +39,7 @@ public class SheetRepositoryImpl extends PersistentRepositoryImpl<Map, Map> impl
     }
 
     @Override
-    public Map selectByPSVNo(String PSVNo) {
+    public Map<String, Object> selectByPSVNo(String PSVNo) {
         return this.getSqlSessionTemplate().selectOne(this.getNamespace() + ".selectByPSVNo", PSVNo);
     }
 
