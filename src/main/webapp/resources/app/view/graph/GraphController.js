@@ -314,7 +314,11 @@ Ext.define('Pressure.view.graph.GraphController', {
         params.pressureUnitConf = CONF.pressureUnitConf;
         params.testId = testId;
 
-        GRAPH_DATA.graphset[0].scaleY.values = "0:" + Ext.ComponentQuery.query('#SET_PRESS')[0].getValue() * 2;
+        if(GRAPH_DATA.graphset[0].scaleY){
+            GRAPH_DATA.graphset[0].scaleY.values = "0:" + Ext.ComponentQuery.query('#SET_PRESS')[0].getValue() * 2;
+        }else if(GRAPH_DATA.graphset[0].scaleY){
+            GRAPH_DATA.graphset[0]["scale-Y"].values = "0:" + Ext.ComponentQuery.query('#SET_PRESS')[0].getValue() * 2;
+        }
 
         zingchart.render({
             id: 'pressureUnit',
