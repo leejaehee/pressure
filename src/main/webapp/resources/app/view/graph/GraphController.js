@@ -15,7 +15,7 @@ Ext.define('Pressure.view.graph.GraphController', {
     alias: 'controller.graph',
 
     onOpenClick: function () {
-        if (Ext.ComponentQuery.query("#currentStatusHidden")[0].getValue() == 1) {
+        if (Ext.ComponentQuery.query("#currentStatusHidden")[0].value == 1) {
             this.onToast('Please stop.');
             return false;
         }
@@ -53,7 +53,7 @@ Ext.define('Pressure.view.graph.GraphController', {
                         var file = Ext.ComponentQuery.query('#loadFilefield')[0].fileInputEl.dom.files[0];
                         var reader = new FileReader();
                         reader.onload = function () {
-                            GRAPH_DATA = reader.result;
+                            GRAPH_DATA = Ext.decode(reader.result);
 
                             zingchart.render({
                                 id: 'pressureUnit',
@@ -87,7 +87,7 @@ Ext.define('Pressure.view.graph.GraphController', {
 
                         reader.readAsText(file, 'UTF-8');
 
-                        this.onToast('Success.');
+                        Ext.ComponentQuery.query("graph")[0].getController().onToast('Success.');
 
                         Ext.ComponentQuery.query('#currentStepHidden')[0].value = 1;
 
@@ -107,8 +107,8 @@ Ext.define('Pressure.view.graph.GraphController', {
         }).center().show();
     },
     onSaveClick: function () {
-        if (Ext.ComponentQuery.query("#currentStatusHidden")[0].getValue() == 1) {
-            this.onToast('Please stop.');
+        if (Ext.ComponentQuery.query("#currentStatusHidden")[0].value == 1) {
+            Ext.ComponentQuery.query("graph")[0].getController().onToast('Please stop.');
             return false;
         }
 
@@ -153,7 +153,7 @@ Ext.define('Pressure.view.graph.GraphController', {
 
                         document.body.removeChild(pom);
 
-                        this.onToast('Now saving.');
+                        Ext.ComponentQuery.query("graph")[0].getController().onToast('Now saving.');
 
                         this.up('window').close();
                     }
@@ -171,8 +171,8 @@ Ext.define('Pressure.view.graph.GraphController', {
         }).center().show();
     },
     onClearClick: function () {
-        if (Ext.ComponentQuery.query("#currentStatusHidden")[0].getValue() == 1) {
-            this.onToast('Please stop.');
+        if (Ext.ComponentQuery.query("#currentStatusHidden")[0].value == 1) {
+            Ext.ComponentQuery.query("graph")[0].getController().onToast('Please stop.');
             return false;
         }
 
@@ -275,23 +275,23 @@ Ext.define('Pressure.view.graph.GraphController', {
         Ext.ComponentQuery.query('#testResult')[0].setFieldStyle('background-color: white; color: white; font: normal 20px tahoma, arial, helvetica, sans-serif;');
     },
     onStartClick: function () {
-        if (Ext.ComponentQuery.query("#currentStatusHidden")[0].getValue() == 1) {
-            this.onToast('Please stop.');
+        if (Ext.ComponentQuery.query("#currentStatusHidden")[0].value == 1) {
+            Ext.ComponentQuery.query("graph")[0].getController().onToast('Please stop.');
             return false;
         }
 
         if (!Ext.ComponentQuery.query('#PSV_NO')[0].getValue()) {
-            this.onToast('Please select a PSVNO.');
+            Ext.ComponentQuery.query("graph")[0].getController().onToast('Please select a PSVNO.');
             return false;
         }
 
         if (!Ext.ComponentQuery.query('#SET_PRESS')[0].getValue()) {
-            this.onToast('Please set Setting Pressure.');
+            Ext.ComponentQuery.query("graph")[0].getController().onToast('Please set Setting Pressure.');
             return false;
         }
 
         if (!CONF.portConf || !CONF.baudrateConf || !CONF.scanTimeConf) {
-            this.onToast('Please set configuration.');
+            Ext.ComponentQuery.query("graph")[0].getController().onToast('Please set configuration.');
             return false;
         }
 
@@ -334,7 +334,7 @@ Ext.define('Pressure.view.graph.GraphController', {
             success: function () {
                 Ext.ComponentQuery.query('#settingPressure')[0].setValue(Ext.ComponentQuery.query('#SET_PRESS')[0].getValue());
                 Ext.ComponentQuery.query('#currentStepHidden')[0].value = Ext.ComponentQuery.query('#currentStepHidden')[0].value + 1;
-                Ext.ComponentQuery.query("#currentStatusHidden")[0].setValue(1);
+                Ext.ComponentQuery.query("#currentStatusHidden")[0].value = 1;
                 var gridStore = Ext.ComponentQuery.query('#pressureGrid')[0].getStore();
                 gridStore.removeAll();
             },
@@ -424,7 +424,7 @@ Ext.define('Pressure.view.graph.GraphController', {
                     },
                     params: Ext.encode(params),
                     success: function () {
-                        Ext.ComponentQuery.query("#currentStatusHidden")[0].setValue(0);
+                        Ext.ComponentQuery.query("#currentStatusHidden")[0].value = 0;
                     },
                     failure: function () {
                     }
@@ -435,8 +435,8 @@ Ext.define('Pressure.view.graph.GraphController', {
         });
     },
     onConfClick: function (btn, e, eOpts) {
-        if (Ext.ComponentQuery.query("#currentStatusHidden")[0].getValue() == 1) {
-            this.onToast('Please stop.');
+        if (Ext.ComponentQuery.query("#currentStatusHidden")[0].value == 1) {
+            Ext.ComponentQuery.query("graph")[0].getController().onToast('Please stop.');
             return false;
         }
 
@@ -451,8 +451,8 @@ Ext.define('Pressure.view.graph.GraphController', {
         }).center().show();
     },
     onDataInputClick: function (btn, e, eOpts) {
-        if (Ext.ComponentQuery.query("#currentStatusHidden")[0].getValue() == 1) {
-            this.onToast('Please stop.');
+        if (Ext.ComponentQuery.query("#currentStatusHidden")[0].value == 1) {
+            Ext.ComponentQuery.query("graph")[0].getController().onToast('Please stop.');
             return false;
         }
 

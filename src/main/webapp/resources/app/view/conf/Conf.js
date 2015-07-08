@@ -63,12 +63,16 @@ Ext.define('Pressure.view.conf.Conf', {
                             valueField: 'portConf',
                             editable: false,
                             name: 'portConf',
-                            itemId: 'portConf'/*,
+                            itemId: 'portConf',
                             listeners: {
                                 afterrender: function (combo, eOpts) {
-                                    this.value="COM3";
+                                    if (CONF.portConf) {
+                                        this.value = CONF.portConf;
+                                    } else {
+                                        this.value = "";
+                                    }
                                 }
-                            }*/
+                            }
                         },
                         {
                             xtype: 'combo',
@@ -83,7 +87,11 @@ Ext.define('Pressure.view.conf.Conf', {
                             itemId: 'baudrateConf',
                             listeners: {
                                 afterrender: function (combo, eOpts) {
-                                    this.value="19200";
+                                    if (CONF.baudrateConf) {
+                                        this.value = CONF.baudrateConf;
+                                    } else {
+                                        this.value = "19200";
+                                    }
                                 }
                             }
                         }
@@ -111,7 +119,15 @@ Ext.define('Pressure.view.conf.Conf', {
                                     fieldLabel: 'Scan time',
                                     name: 'scanTimeConf',
                                     allowBlank: false,
-                                    value: CONF.scanTimeConf
+                                    listeners: {
+                                        afterrender: function (field, eOpts) {
+                                            if (CONF.scanTimeConf) {
+                                                field.setValue(CONF.scanTimeConf);
+                                            } else {
+                                                field.setValue(1000);
+                                            }
+                                        }
+                                    }
                                 },
                                 {
                                     xtype: 'label',
@@ -133,7 +149,11 @@ Ext.define('Pressure.view.conf.Conf', {
                             itemId: 'pressureUnitConf',
                             listeners: {
                                 afterrender: function (combo, eOpts) {
-                                    this.value="MPa";
+                                    if (CONF.pressureUnitConf) {
+                                        this.value = CONF.pressureUnitConf;
+                                    } else {
+                                        this.value = MPa;
+                                    }
                                 }
                             }
                         }
